@@ -49,7 +49,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>lab.idioglossia</groupId>
+			<groupId>com.github.idioglossia</groupId>
 			<artifactId>json-sloth</artifactId>
 			<version>1.0.1-RELEASE</version>
 		</dependency>
