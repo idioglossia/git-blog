@@ -2,11 +2,14 @@ package lab.idioglossia.gitblog.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lab.idioglossia.gitblog.model.ApplicationProperties;
+import lab.idioglossia.gitblog.model.ConfigModel;
 import lab.idioglossia.gitblog.model.dto.InitializeDto;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lab.idioglossia.jsonsloth.JsonSlothStorage;
+import lab.idioglossia.sloth.FileWriter;
 import lab.idioglossia.sloth.SlothStorage;
+import lombok.SneakyThrows;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.lib.Repository;
@@ -32,6 +35,7 @@ public class InitializerService {
         try {
             initGit(initializeDto.getAddress(), initializeDto.getReference());
             initDB(initializeDto.getAddress(), initializeDto.getPassword());
+            writeConfig(initializeDto);
         } catch (GitAPIException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -58,6 +62,17 @@ public class InitializerService {
         Git git = new Git(repository);
         git.checkout().addPath(ref).call();
 //        git.fetch().call();
+    }
+
+    @SneakyThrows
+    private void writeConfig(InitializeDto initializeDto){
+        ConfigModel configModel = new ConfigModel();
+        configModel.setInitializeDto(initializeDto);
+
+        String json = objectMapper.writeValueAsString(configModel);
+        File file = new File("config.json");
+        FileWriter fileWriter = new FileWriter(1);
+        fileWriter.write(file, json);
     }
 
     private void setupAdmin(SlothStorage slothStorage, String password){
