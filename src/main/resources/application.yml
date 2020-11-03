@@ -1,0 +1,5 @@
+gitblog:
+  config:
+    dbPath: ".db/"
+    reads: 10
+    writes: 5

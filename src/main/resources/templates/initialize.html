@@ -17,13 +17,20 @@
     <form method="post">
         <div class="form-group">
             <label for="repository">Repository Address</label>
-            <input type="text" class="form-control" id="repository" aria-describedby="repositoryHelp" placeholder="Enter local repository address">
+            <input type="text" name="address" class="form-control" id="repository" aria-describedby="repositoryHelp" placeholder="Enter local repository address">
             <small id="repositoryHelp" class="form-text text-muted">Clone your repository and then enter address of repository here. It should be local.</small>
         </div>
+
+        <div class="form-group">
+            <label for="reference">Reference</label>
+            <input type="text" name="reference" class="form-control" id="reference" aria-describedby="referenceHelp" placeholder="Enter Repository Reference">
+            <small id="referenceHelp" class="form-text text-muted">Write your reference for this repository. Its usually "master" or "main".</small>
+        </div>
+
         <div class="form-group">
             <label for="password">Admin Password</label>
-            <input type="password" class="form-control" aria-describedby="passwordHelp" id="password" placeholder="Admin Account Password">
-            <small id="passwordHelp" class="form-text text-muted">This password is used for administrator account.</small>
+            <input type="password" name="password" class="form-control" aria-describedby="passwordHelp" id="password" placeholder="Admin Account Password">
+            <small id="passwordHelp" class="form-text text-muted">This password is used for administrator account. This account will automatically be created when application initializes.</small>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
