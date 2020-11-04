@@ -3,6 +3,9 @@ gitblog:
     dbPath: ".db/"
     reads: 10
     writes: 5
+  git:
+    messages:
+      init: "Git Blog init"
 logging:
   file:
     name: gitblog.log

@@ -3,6 +3,7 @@ package lab.idioglossia.gitblog.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lab.idioglossia.gitblog.model.ApplicationProperties;
 import lab.idioglossia.gitblog.model.ConfigModel;
+import lab.idioglossia.gitblog.model.GitMessagesProperties;
 import lab.idioglossia.gitblog.model.dto.InitializeDto;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
@@ -23,19 +24,23 @@ import java.io.IOException;
 @Service
 public class InitializerService {
     private final ApplicationProperties applicationProperties;
+    private final GitMessagesProperties gitMessagesProperties;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public InitializerService(ApplicationProperties applicationProperties, ObjectMapper objectMapper) {
+    public InitializerService(ApplicationProperties applicationProperties, GitMessagesProperties gitMessagesProperties, ObjectMapper objectMapper) {
         this.applicationProperties = applicationProperties;
+        this.gitMessagesProperties = gitMessagesProperties;
         this.objectMapper = objectMapper;
     }
 
     public void initialize(InitializeDto initializeDto){
         try {
-            initGit(initializeDto.getAddress(), initializeDto.getReference());
+            Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
             initDB(initializeDto.getAddress(), initializeDto.getPassword());
             writeConfig(initializeDto);
+
+            git.commit().setMessage(gitMessagesProperties.getInit()).setNoVerify(true).call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -55,13 +60,14 @@ public class InitializerService {
         return dbPath;
     }
 
-    public void initGit(String address, String ref) throws IOException, GitAPIException {
+    public Git initGit(String address, String ref) throws IOException, GitAPIException {
         Repository repository = new FileRepositoryBuilder()
                 .setGitDir(new File(address + (address.endsWith("/") ? ".git" : "/.git")))
                 .build();
         Git git = new Git(repository);
         git.checkout().addPath(ref).call();
 //        git.fetch().call();
+        return git;
     }
 
     @SneakyThrows
