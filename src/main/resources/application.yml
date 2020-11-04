@@ -3,3 +3,8 @@ gitblog:
     dbPath: ".db/"
     reads: 10
     writes: 5
+logging:
+  file:
+    name: gitblog.log
+  level:
+    ROOT: warn
