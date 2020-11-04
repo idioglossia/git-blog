@@ -1,7 +1,10 @@
 package lab.idioglossia.gitblog.model;
 
 import lab.idioglossia.gitblog.model.dto.InitializeDto;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter

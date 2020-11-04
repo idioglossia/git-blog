@@ -4,7 +4,6 @@ import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.util.UserAuthHelper;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class CustomUserDetailsService implements UserDetailsService {
     private final JsonSlothManager jsonSlothManager;
 
-    @Autowired
     public CustomUserDetailsService(JsonSlothManager jsonSlothManager) {
         this.jsonSlothManager = jsonSlothManager;
     }
