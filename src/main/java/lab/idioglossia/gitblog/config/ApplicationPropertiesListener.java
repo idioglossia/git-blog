@@ -14,6 +14,7 @@ public class ApplicationPropertiesListener implements ApplicationListener<Applic
             ConfigurableEnvironment environment = event.getEnvironment();
             Properties props = new Properties();
             props.put("gitblog.config.init", "true");
+            props.put("spring.profiles.active", "initialized");
             environment.getPropertySources().addFirst(new PropertiesPropertySource("gitblog", props));
         }
     }

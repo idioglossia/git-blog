@@ -12,3 +12,5 @@ logging:
     name: gitblog.log
   level:
     ROOT: info
+server:
+  port: 8083

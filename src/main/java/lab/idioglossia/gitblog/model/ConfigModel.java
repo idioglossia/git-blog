@@ -6,14 +6,17 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
 public class ConfigModel extends InitializeDto {
+    private String dbPath;
 
     public ConfigModel() {
     }
 
     public void setInitializeDto(InitializeDto initializeDto){
         this.setAddress(initializeDto.getAddress());
-        this.setPassword(initializeDto.getPassword());
         this.setReference(initializeDto.getReference());
     }
+
+    public void setPassword(String password){}
 }
