@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Profile("!initialized")
@@ -15,11 +14,7 @@ public class PreInitSecurity extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic().disable()
                 .csrf().disable()
-                .sessionManagement()
-                .enableSessionUrlRewriting(false)
-                .sessionFixation().migrateSession()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER)
-                .and()
+                .sessionManagement().disable()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/login", "/panel", "/panel/**").denyAll()
@@ -29,8 +24,6 @@ public class PreInitSecurity extends WebSecurityConfigurerAdapter {
                 .requestCache()
                 .requestCache(new NullRequestCache())
                 .and()
-                .rememberMe().alwaysRemember(true)
-                .and()
-                .formLogin().disable();
+                .rememberMe().disable();
     }
 }
