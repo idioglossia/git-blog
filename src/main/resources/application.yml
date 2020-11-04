@@ -1,5 +1,6 @@
 gitblog:
   config:
+    init: false
     dbPath: ".db/"
     reads: 10
     writes: 5
