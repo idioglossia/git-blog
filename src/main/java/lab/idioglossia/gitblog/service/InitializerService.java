@@ -11,21 +11,25 @@ import lab.idioglossia.jsonsloth.JsonSlothStorage;
 import lab.idioglossia.sloth.FileWriter;
 import lab.idioglossia.sloth.SlothStorage;
 import lombok.SneakyThrows;
+import net.lingala.zip4j.ZipFile;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.*;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+
 
 @Service
 public class InitializerService {
     private final ApplicationProperties applicationProperties;
     private final GitMessagesProperties gitMessagesProperties;
     private final ObjectMapper objectMapper;
+    private final String GIT_BLOG_ZIP_RESOURCE = "gitblog.zip";
 
     @Autowired
     public InitializerService(ApplicationProperties applicationProperties, GitMessagesProperties gitMessagesProperties, ObjectMapper objectMapper) {
@@ -39,13 +43,20 @@ public class InitializerService {
             Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
             initDB(initializeDto.getAddress(), initializeDto.getPassword());
             writeConfig(initializeDto);
-
+            moveGitBlogInterface(initializeDto.getAddress());
             git.commit().setMessage(gitMessagesProperties.getInit()).setNoVerify(true).call();
         } catch (GitAPIException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void moveGitBlogInterface(String address) throws IOException {
+        File gitBlogZip = new ClassPathResource(GIT_BLOG_ZIP_RESOURCE).getFile();
+        ZipFile zipFile = new ZipFile(gitBlogZip);
+        zipFile.extractAll(address);
+//        unzip(gitBlogZip, address.endsWith("/") ? address : address.substring(0, address.length() - 1));
     }
 
     public String initDB(String basePath, String adminPassword) throws IOException {
