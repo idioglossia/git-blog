@@ -1,6 +1,7 @@
 package lab.idioglossia.gitblog.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lab.idioglossia.gitblog.GitBlogApplication;
 import lab.idioglossia.gitblog.model.ApplicationProperties;
 import lab.idioglossia.gitblog.model.ConfigModel;
 import lab.idioglossia.gitblog.model.GitMessagesProperties;
@@ -40,18 +41,14 @@ public class InitializerService {
         this.objectMapper = objectMapper;
     }
 
+    @SneakyThrows
     public void initialize(InitializeDto initializeDto){
-        try {
-            Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
-            initDB(initializeDto.getAddress(), initializeDto.getPassword());
-            writeConfig(initializeDto);
-            moveGitBlogInterface(initializeDto.getAddress());
-            git.commit().setMessage(gitMessagesProperties.getInit()).setNoVerify(true).call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
+        initDB(initializeDto.getAddress(), initializeDto.getPassword());
+        writeConfig(initializeDto);
+        moveGitBlogInterface(initializeDto.getAddress());
+        git.commit().setMessage(gitMessagesProperties.getInit()).setNoVerify(true).call();
+        GitBlogApplication.restart();
     }
 
     private void moveGitBlogInterface(String address) throws IOException {

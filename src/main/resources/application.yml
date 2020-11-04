@@ -10,4 +10,4 @@ logging:
   file:
     name: gitblog.log
   level:
-    ROOT: warn
+    ROOT: info
