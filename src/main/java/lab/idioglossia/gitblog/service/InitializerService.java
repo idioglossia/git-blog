@@ -23,13 +23,15 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 
+import static lab.idioglossia.gitblog.config.Common.CONFIG_FILE_NAME;
+import static lab.idioglossia.gitblog.config.Common.GIT_BLOG_ZIP_RESOURCE;
+
 
 @Service
 public class InitializerService {
     private final ApplicationProperties applicationProperties;
     private final GitMessagesProperties gitMessagesProperties;
     private final ObjectMapper objectMapper;
-    private final String GIT_BLOG_ZIP_RESOURCE = "gitblog.zip";
 
     @Autowired
     public InitializerService(ApplicationProperties applicationProperties, GitMessagesProperties gitMessagesProperties, ObjectMapper objectMapper) {
@@ -87,7 +89,7 @@ public class InitializerService {
         configModel.setInitializeDto(initializeDto);
 
         String json = objectMapper.writeValueAsString(configModel);
-        File file = new File("config.json");
+        File file = new File(CONFIG_FILE_NAME);
         FileWriter fileWriter = new FileWriter(1);
         fileWriter.write(file, json);
     }

@@ -1,12 +1,11 @@
 package lab.idioglossia.gitblog.config;
 
-import lab.idioglossia.gitblog.model.ApplicationProperties;
-import lab.idioglossia.gitblog.model.GitMessagesProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
-@EnableConfigurationProperties({ApplicationProperties.class, GitMessagesProperties.class})
 @Configuration
+@DependsOn("baseConfiguration")
 public class ApplicationConfiguration {
+
 
 }

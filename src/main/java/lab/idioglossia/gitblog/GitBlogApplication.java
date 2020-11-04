@@ -13,12 +13,13 @@ public class GitBlogApplication {
 		context = SpringApplication.run(GitBlogApplication.class, args);
 	}
 
+
 	public synchronized static void restart() {
 		ApplicationArguments args = context.getBean(ApplicationArguments.class);
 
 		Thread thread = new Thread(() -> {
 			context.close();
-			context = SpringApplication.run(GitBlogApplication.class, args.getSourceArgs());
+			main(args.getSourceArgs());
 		});
 
 		thread.setDaemon(false);
