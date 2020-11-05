@@ -18,6 +18,9 @@ public class UserEntity {
     @JsonSlothId
     private String username;
     private String password;
+    private String profilePicture;
+    private String bio;
+    private String website;
     private Date creationDate;
     private List<String> authorities;
 }

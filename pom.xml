@@ -96,6 +96,15 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>com.github.transferwise</groupId>
+			<artifactId>spring-icu</artifactId>
+			<version>0.3.0</version>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>

@@ -1,12 +1,12 @@
 gitblog:
+  links:
+    github: "https://github.com/idioglossia/git-blog"
+    features: "https://github.com/idioglossia/git-blog"
   config:
     init: false
     dbPath: ".db/"
     reads: 10
     writes: 5
-  git:
-    messages:
-      init: "Git Blog init"
 logging:
   file:
     name: gitblog.log
@@ -14,3 +14,6 @@ logging:
     ROOT: info
 server:
   port: 8083
+spring:
+  messages:
+    basename: lang/res

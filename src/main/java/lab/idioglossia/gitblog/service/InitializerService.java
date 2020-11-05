@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lab.idioglossia.gitblog.GitBlogApplication;
 import lab.idioglossia.gitblog.model.ApplicationProperties;
 import lab.idioglossia.gitblog.model.ConfigModel;
-import lab.idioglossia.gitblog.model.GitMessagesProperties;
 import lab.idioglossia.gitblog.model.Role;
 import lab.idioglossia.gitblog.model.dto.InitializeDto;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
@@ -36,14 +35,12 @@ import static lab.idioglossia.gitblog.config.Common.GIT_BLOG_ZIP_RESOURCE;
 @Service
 public class InitializerService {
     private final ApplicationProperties applicationProperties;
-    private final GitMessagesProperties gitMessagesProperties;
     private final PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public InitializerService(ApplicationProperties applicationProperties, GitMessagesProperties gitMessagesProperties, PasswordEncoder passwordEncoder, ObjectMapper objectMapper) {
+    public InitializerService(ApplicationProperties applicationProperties, PasswordEncoder passwordEncoder, ObjectMapper objectMapper) {
         this.applicationProperties = applicationProperties;
-        this.gitMessagesProperties = gitMessagesProperties;
         this.passwordEncoder = passwordEncoder;
         this.objectMapper = objectMapper;
     }
@@ -100,7 +97,7 @@ public class InitializerService {
 
     private void addAndCommit(Git git) throws GitAPIException {
         git.add().addFilepattern(".").call();
-        git.commit().setMessage(gitMessagesProperties.getInit()).setNoVerify(true).call();
+        git.commit().setMessage("Git Blog Initialized").setNoVerify(true).call();
     }
 
     private void setupAdmin(SlothStorage slothStorage, String password){
