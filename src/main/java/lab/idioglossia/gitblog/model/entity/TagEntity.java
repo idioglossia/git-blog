@@ -1,5 +1,6 @@
 package lab.idioglossia.gitblog.model.entity;
 
+import lab.idioglossia.gitblog.model.PostPreview;
 import lab.idioglossia.jsonsloth.JsonSlothEntity;
 import lab.idioglossia.jsonsloth.JsonSlothId;
 import lab.idioglossia.sloth.Collection;
@@ -8,19 +9,16 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
-@JsonSlothEntity(collectionName = "users", type = Collection.Type.MAP)
+@JsonSlothEntity(collectionName = "tags", type = Collection.Type.MAP)
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class TagEntity {
     @JsonSlothId
-    private String username;
-    private String password;
-    private String gravatarUrl;
-    private String bio;
-    private String website;
-    private Date creationDate;
-    private List<String> authorities;
+    private String name;
+    private Date date;
+    private List<Integer> postIds;
+    private List<PostPreview> posts;
 }

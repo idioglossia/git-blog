@@ -14,6 +14,10 @@ public class AbstractSlothRepository<K, E> {
         this.jsonSlothManager = jsonSlothManager;
     }
 
+    public void save(E e){
+        jsonSlothManager.save(e);
+    }
+
     public E get(K k){
         return jsonSlothManager.get(k, eClass);
     }

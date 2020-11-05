@@ -11,9 +11,4 @@ public class SlothHistoryRepository extends AbstractSlothRepository<Integer, His
         super(HistoryEntity.class, jsonSlothManager);
         this.jsonSlothManager = jsonSlothManager;
     }
-
-    @Override
-    public void save(HistoryEntity historyEntity) {
-        jsonSlothManager.save(historyEntity);
-    }
 }

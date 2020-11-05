@@ -15,14 +15,13 @@
                     <!-- small box -->
                     <div class="small-box bg-info">
                         <div class="inner">
-                            <h3>150</h3> <!-- TODO: number of posts -->
-
+                            <h3 th:text="${reposize.get('post')}">150</h3>
                             <p>Posts</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-android-create"></i>
                         </div>
-                        <a href="#" class="small-box-footer">See lits <i class="fas fa-arrow-circle-right"></i></a> <!-- TODO: move to post list -->
+                        <a th:href="@{/panel/posts}" class="small-box-footer">See lits <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -30,13 +29,13 @@
                     <!-- small box -->
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>200</h3>
-                            <p>Tags</p> <!-- TODO: number of tags -->
+                            <h3 th:text="${reposize.get('tag')}">200</h3>
+                            <p>Tags</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-android-document"></i>
                         </div>
-                        <a href="#" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a> <!-- TODO: move to tags lists -->
+                        <a th:href="@{/panel/tags}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -44,18 +43,17 @@
                     <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>44</h3>
-                            <p>Users</p> <!-- TODO: number of users -->
+                            <h3 th:text="${reposize.get('user')}">44</h3>
+                            <p>Users</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-person-add"></i>
                         </div>
-                        <a href="#" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a> <!-- TODO: move to users list -->
+                        <a th:href="@{/panel/users}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
 
-            <!-- TODO: history -->
             <h2>Blog History</h2>
             <!-- Timelime example  -->
             <div class="row">

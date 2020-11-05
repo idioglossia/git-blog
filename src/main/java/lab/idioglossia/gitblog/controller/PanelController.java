@@ -22,6 +22,7 @@ public class PanelController {
     public ModelAndView home() {
         Map<String, Object> model = new HashMap<>();
         model.put("today", panelHomeService.getTodayDateString());
+        model.put("reposize", panelHomeService.getRepositorySizes());
         model.put("histories", panelHomeService.getHistories());
         return new ModelAndView("panel", model);
     }
