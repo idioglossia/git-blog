@@ -8,6 +8,8 @@ import lombok.*;
 import java.util.Date;
 import java.util.List;
 
+import static lab.idioglossia.gitblog.model.Role.ADMIN;
+
 @JsonSlothEntity(collectionName = "users", type = Collection.Type.MAP)
 @Getter
 @Setter
@@ -23,4 +25,8 @@ public class UserEntity {
     private String website;
     private Date creationDate;
     private List<String> authorities;
+
+    public boolean isAdmin(){
+        return authorities.contains(ADMIN);
+    }
 }

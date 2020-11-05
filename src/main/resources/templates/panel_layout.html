@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
+    <title layout:title-pattern="{{$CONTENT_TITLE - $LAYOUT_TITLE}}"></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
@@ -34,11 +34,14 @@
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img th:src="@{/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image"> <!-- TODO: user image -->
+                <div class="image" th:if="${currentUser.gravatarUrl != null}">
+                    <img src="" th:src="${currentUser.gravatarUrl}" style="height: 160px; width: 160px;" width="160" height="160" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="image" th:if="${currentUser.gravatarUrl == null}">
+                    <img src="" th:src="@{/dist/img/boxed-bg.jpg}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">Admin</a> <!-- TODO: user name here --> <!-- TODO: move to user profile and edit -->
+                    <a th:href="@{/panel/users/{username}(username=${currentUser.username})}" th:text="${currentUser.username}" class="d-block"></a>
                 </div>
             </div>
 
@@ -47,7 +50,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
-                    <li class="nav-item has-treeview">
+                    <li th:if="${currentUser.isAdmin()}" class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-tools"></i> <!-- TODO: only for admin -->
                             <p>Admin Area <i class="right fas fa-angle-right"></i></p>

@@ -56,6 +56,7 @@ public class BaseConfiguration implements WebMvcConfigurer {
     public ICUMessageSource messageSource() {
         ICUReloadableResourceBundleMessageSource messageSource = new ICUReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:lang/res");
+        messageSource.setCacheSeconds(20);
         return messageSource;
     }
 

@@ -1,6 +1,7 @@
 package lab.idioglossia.gitblog.controller;
 
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
+import lab.idioglossia.gitblog.service.panel.PanelUserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,14 +14,17 @@ import java.util.Map;
 @Profile("initialized")
 public class PanelController {
     private final PanelHomeService panelHomeService;
+    private final PanelUserService panelUserService;
 
-    public PanelController(PanelHomeService panelHomeService) {
+    public PanelController(PanelHomeService panelHomeService, PanelUserService panelUserService) {
         this.panelHomeService = panelHomeService;
+        this.panelUserService = panelUserService;
     }
 
     @GetMapping("/panel")
     public ModelAndView home() {
         Map<String, Object> model = new HashMap<>();
+        model.put("currentUser", panelUserService.getCurrentUser());
         model.put("today", panelHomeService.getTodayDateString());
         model.put("reposize", panelHomeService.getRepositorySizes());
         model.put("histories", panelHomeService.getHistories());
