@@ -37,12 +37,14 @@ public class InitializerService {
     private final ApplicationProperties applicationProperties;
     private final PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
+    private final HistoryEntityFactoryService historyEntityFactoryService;
 
     @Autowired
-    public InitializerService(ApplicationProperties applicationProperties, PasswordEncoder passwordEncoder, ObjectMapper objectMapper) {
+    public InitializerService(ApplicationProperties applicationProperties, PasswordEncoder passwordEncoder, ObjectMapper objectMapper, HistoryEntityFactoryService historyEntityFactoryService) {
         this.applicationProperties = applicationProperties;
         this.passwordEncoder = passwordEncoder;
         this.objectMapper = objectMapper;
+        this.historyEntityFactoryService = historyEntityFactoryService;
     }
 
     @SneakyThrows
@@ -52,6 +54,7 @@ public class InitializerService {
         writeConfig(initializeDto, dbPath);
         moveGitBlogInterface(initializeDto.getAddress());
         addAndCommit(git);
+        addHisotry(dbPath);
         GitBlogApplication.restart();
     }
 
@@ -62,9 +65,14 @@ public class InitializerService {
         }else {
             dbPath += "/" + applicationProperties.getDbPath();
         }
-        SlothStorage slothStorage = new SlothStorage(dbPath, applicationProperties.getWrites(), applicationProperties.getReads());
-        setupAdmin(slothStorage, adminPassword);
+        JsonSlothManager jsonSlothManager = getJsonSlothManager(dbPath);
+        setupAdmin(jsonSlothManager, adminPassword);
         return dbPath;
+    }
+
+    private JsonSlothManager getJsonSlothManager(String dbPath) throws IOException {
+        SlothStorage slothStorage = new SlothStorage(dbPath, applicationProperties.getWrites(), applicationProperties.getReads());
+        return new JsonSlothManager(new JsonSlothStorage(slothStorage), objectMapper);
     }
 
     public Git initGit(String address, String ref) throws IOException, GitAPIException {
@@ -75,6 +83,10 @@ public class InitializerService {
         git.checkout().addPath(ref).call();
 //        git.fetch().call();
         return git;
+    }
+
+    private void addHisotry(String dbPath) throws IOException {
+        getJsonSlothManager(dbPath).save(historyEntityFactoryService.initializedHistory());
     }
 
     private void moveGitBlogInterface(String address) throws IOException {
@@ -100,8 +112,7 @@ public class InitializerService {
         git.commit().setMessage("Git Blog Initialized").setNoVerify(true).call();
     }
 
-    private void setupAdmin(SlothStorage slothStorage, String password){
-        JsonSlothManager jsonSlothManager = new JsonSlothManager(new JsonSlothStorage(slothStorage), objectMapper);
+    private void setupAdmin(JsonSlothManager jsonSlothManager, String password){
         List<String> roles = new ArrayList<>();
         roles.add(Role.ADMIN);
         roles.add(Role.USER);
@@ -111,6 +122,8 @@ public class InitializerService {
                 .username("admin")
                 .creationDate(new Date())
                 .build());
+
+
     }
 
 }

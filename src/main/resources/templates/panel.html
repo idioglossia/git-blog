@@ -64,25 +64,25 @@
                     <div class="timeline">
                         <!-- timeline time label -->
                         <div class="time-label">
-                            <span class="bg-green">4 Nov. 2020</span>
+                            <span th:text="${today}" class="bg-green"></span>
                         </div>
                         <!-- /.timeline-label -->
                         <!-- timeline item -->
-                        <div>
-                            <i class="fab fa-github bg-blue"></i>
+                        <div th:each="history: ${histories}">
+                            <i th::class="${history.getIcon().getFullClass()}"></i>
                             <div class="timeline-item">
-                                <span class="time"><i class="fas fa-clock"></i> 12:05</span>
-                                <h3 class="timeline-header"><a href="https://github.com/idioglossia/git-blog">Git Blog</a> initialized!</h3>
+                                <span class="time"><i class="fas fa-clock"></i> [[${#dates.format(history.date, 'dd-MM-yyyy HH:mm')}]]</span>
+                                <h3 class="timeline-header"><a th:href="${history.titleLink.link}" th:text="${history.titleLink.text}"></a> [[${history.titleAction}]]</h3>
 
-                                <div class="timeline-body">
-                                    This repository is successfully initialized. You can now <b>start creating your blog!</b> You can read more about Git Blog, features and tools.
-                                </div>
-                                <div class="timeline-footer">
-                                    <a class="btn btn-primary btn-sm">Read more</a>
+                                <div class="timeline-body" th:text="${history.description}"></div>
+
+                                <div th:if="${history.button}" class="timeline-footer">
+                                    <a th:href="${history.button.link}" th:text="${history.button.text}" class="btn btn-primary btn-sm"></a>
                                 </div>
                             </div>
                         </div>
                         <!-- END timeline item -->
+
 
                         <div>
                             <i class="fas fa-clock bg-gray"></i>

@@ -32,6 +32,9 @@ public class HistoryEntity {
         private String color;
         private String iconClass;
         private String preClass = "fab";
+        public String getFullClass(){
+            return preClass + " " + iconClass + " bg_"+ color;
+        }
     }
 
     @Getter
