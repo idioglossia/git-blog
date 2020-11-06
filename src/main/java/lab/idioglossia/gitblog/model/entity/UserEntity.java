@@ -22,7 +22,7 @@ public class UserEntity {
     private String username;
     private String name;
     private String password;
-    private String gravatarUrl;
+    private String profilePicture;
     private String title;
     private String bio;
     private String website;

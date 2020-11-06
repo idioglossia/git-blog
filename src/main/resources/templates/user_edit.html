@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}">
+<head>
+    <title>Git Blog - [[${user.username}]]</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Edit User</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form role="form" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Full Name" th:value="${user.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="website">Website Link</label>
+                        <input type="text" name="website" class="form-control" id="website" placeholder="Personal Website" th:value="${user.website}">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea class="form-control" name="bio" id="bio" placeholder="Bio" maxlength="300" th:text="${user.bio}"></textarea>
+                    </div>
+                    <div class="form-group" th:if="${currentUser.isAdmin()}">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" id="title" th:value="${user.title}">
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePicture">Profile Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" name="profilePicture" class="custom-file-input" id="profilePicture" accept="image/*">
+                                <label class="custom-file-label" for="profilePicture">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="New Password">
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+
+    </div>
+</section>
+</body>
+</html>

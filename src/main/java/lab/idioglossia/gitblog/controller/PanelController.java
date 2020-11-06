@@ -1,11 +1,13 @@
 package lab.idioglossia.gitblog.controller;
 
+import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -45,6 +47,38 @@ public class PanelController {
         return new ModelAndView("user_view", model);
     }
 
+    @GetMapping("/panel/users/edit/{username}")
+    public ModelAndView getEditUser(@PathVariable(value = "username") String username){
+        Map<String, Object> model = getBaseModel("Edit User (" + username + ")");
+        model.put("user", userService.getUser(username));
+        return new ModelAndView("user_edit", model);
+    }
+
+    @PostMapping("/panel/users/edit/{username}")
+    public ModelAndView doEditUser(@PathVariable(value = "username") String username, UserEditDto userEditDto){
+        userService.editUser(username, userEditDto);
+        return getEditUser(username);
+    }
+
+    /*@PostMapping("/panel/users/edit/{username}")
+    public ModelAndView doEditUser(@PathVariable(value = "username") String username,
+                                   @RequestParam(value = "title", required = false) String title,
+                                   @RequestParam(value = "name", required = false) String name,
+                                   @RequestParam(value = "password", required = false) String password,
+                                   @RequestParam(value = "website", required = false) String website,
+                                   @RequestParam(value = "bio", required = false) String bio,
+                                   @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture
+    ){
+        userService.editUser(username, UserEditDto.builder()
+                .title(title)
+                .bio(bio)
+                .name(name)
+                .password(password)
+                .profilePicture(profilePicture)
+                .website(website)
+                .build());
+        return getEditUser(username);
+    }*/
 
     private Map<String, Object> getBaseModel(String page){
         Map<String, Object> model = new HashMap<>();

@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Profile("initialized")
@@ -48,7 +45,9 @@ public class PanelHomeService {
 
     public List<HistoryEntity> getHistories(){
         int size = historyRepository.size();
-        return historyRepository.get(size - 10, size);
+        List<HistoryEntity> historyEntities = historyRepository.get(size - 10, size);
+        Collections.reverse(historyEntities);
+        return historyEntities;
     }
 
 }

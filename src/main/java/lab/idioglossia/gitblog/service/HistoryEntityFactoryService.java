@@ -34,9 +34,25 @@ public class HistoryEntityFactoryService {
                         .text(messageSource.getMessage("read-more", null, Locale.US))
                         .build())
                 .icon(HistoryEntity.HistoryIcon.builder()
-                        .color("blue")
+                        .color("bg-blue")
                         .iconClass("fa-github")
                         .preClass("fab")
+                        .build())
+                .build();
+    }
+
+    public HistoryEntity userProfileUpdated(String username){
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleAction("'s profile updated")
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel/users/" + username)
+                        .text(username)
+                        .build())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-green")
+                        .iconClass("fa-user-edit")
+                        .preClass("fas")
                         .build())
                 .build();
     }

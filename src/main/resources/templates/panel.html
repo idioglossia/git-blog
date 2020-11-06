@@ -67,12 +67,12 @@
                     <!-- /.timeline-label -->
                     <!-- timeline item -->
                     <div th:each="history: ${histories}">
-                        <i th::class="${history.getIcon().getFullClass()}"></i>
+                        <i th:class="${history.getIcon().getFullClass()}"></i>
                         <div class="timeline-item">
                             <span class="time"><i class="fas fa-clock"></i> [[${#dates.format(history.date, 'dd-MM-yyyy HH:mm')}]]</span>
                             <h3 class="timeline-header"><a th:href="${history.titleLink.link}" th:text="${history.titleLink.text}"></a> [[${history.titleAction}]]</h3>
 
-                            <div class="timeline-body" th:text="${history.description}"></div>
+                            <div th:if="${history.description}" class="timeline-body" th:text="${history.description}"></div>
 
                             <div th:if="${history.button}" class="timeline-footer">
                                 <a th:href="${history.button.link}" th:text="${history.button.text}" class="btn btn-primary btn-sm"></a>
