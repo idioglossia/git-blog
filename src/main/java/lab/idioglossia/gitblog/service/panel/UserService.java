@@ -5,6 +5,7 @@ import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.repository.FileRepository;
 import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.UserRepository;
+import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Profile("initialized")
@@ -27,14 +29,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GitService gitService;
     private final HistoryRepository historyRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
     private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService) {
+    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService) {
         this.userRepository = userRepository;
         this.fileRepository = fileRepository;
         this.passwordEncoder = passwordEncoder;
+        this.gitService = gitService;
         this.historyRepository = historyRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
     }
@@ -52,22 +56,25 @@ public class UserService {
         if(!currentUser.isAdmin() && !currentUser.getUsername().equals(username))
             return;
 
-        editUser(username, new UserEditor() {
+        AtomicInteger atomicHash = new AtomicInteger(0);
+        UserEntity userEntity = editUser(username, new UserEditor() {
             @Override
             public void editUser(UserEntity userEntity) {
+                System.out.println(userEntity);
+                atomicHash.set(userEntity.hashCode());
                 userEntity.setBio(userEditDto.getBio());
                 userEntity.setName(userEditDto.getName());
                 userEntity.setWebsite(userEditDto.getWebsite());
-                if(!StringUtils.isEmpty(userEditDto.getPassword())){
+                if (!StringUtils.isEmpty(userEditDto.getPassword())) {
                     userEntity.setPassword(passwordEncoder.encode(userEditDto.getPassword()));
                 }
                 if (currentUser.isAdmin()) {
                     userEntity.setTitle(userEditDto.getTitle());
                 }
 
-                if(userEditDto.getProfilePicture() != null && !StringUtils.isEmpty(userEditDto.getProfilePicture().getOriginalFilename())){
+                if (userEditDto.getProfilePicture() != null && !StringUtils.isEmpty(userEditDto.getProfilePicture().getOriginalFilename())) {
                     log.info("Updating user profile picture");
-                    if(userEntity.getProfilePicture() != null){
+                    if (userEntity.getProfilePicture() != null) {
                         fileRepository.removeFile("images", userEntity.getProfilePicture());
                     }
 
@@ -81,7 +88,10 @@ public class UserService {
             }
         });
 
-        historyRepository.save(historyEntityFactoryService.userProfileUpdated(username));
+        if(atomicHash.get() != userEntity.hashCode()){
+            historyRepository.save(historyEntityFactoryService.userProfileUpdated(username));
+            gitService.addAndCommit("User profile updated");
+        }
 
     }
 
@@ -109,10 +119,11 @@ public class UserService {
         return principal.toString();
     }
 
-    private synchronized void editUser(String username, UserEditor userEditor){
+    private synchronized UserEntity editUser(String username, UserEditor userEditor){
         UserEntity userEntity = userRepository.get(username);
         userEditor.editUser(userEntity);
         userRepository.update(userEntity);
+        return userEntity;
     }
 
     public interface UserEditor {
