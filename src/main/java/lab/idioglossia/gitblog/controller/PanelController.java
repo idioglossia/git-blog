@@ -41,7 +41,7 @@ public class PanelController {
     private Map<String, Object> getBaseModel(String page){
         Map<String, Object> model = new HashMap<>();
         model.put("currentUser", userService.getCurrentUser());
-        model.put("curentPage", page);
+        model.put("currentPage", page);
         return model;
     }
 }
