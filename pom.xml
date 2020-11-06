@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.github.idioglossia</groupId>
 			<artifactId>json-sloth</artifactId>
-			<version>1.1.4-RELEASE</version>
+			<version>1.1.5-RELEASE</version>
 		</dependency>
 
 		<dependency>

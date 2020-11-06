@@ -2,14 +2,8 @@ package lab.idioglossia.gitblog.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lab.idioglossia.gitblog.model.ConfigModel;
-import lab.idioglossia.gitblog.repository.HistoryRepository;
-import lab.idioglossia.gitblog.repository.PostRepository;
-import lab.idioglossia.gitblog.repository.TagRepository;
-import lab.idioglossia.gitblog.repository.UserRepository;
-import lab.idioglossia.gitblog.repository.sloth.SlothHistoryRepository;
-import lab.idioglossia.gitblog.repository.sloth.SlothPostRepository;
-import lab.idioglossia.gitblog.repository.sloth.SlothTagRepository;
-import lab.idioglossia.gitblog.repository.sloth.SlothUserRepository;
+import lab.idioglossia.gitblog.repository.*;
+import lab.idioglossia.gitblog.repository.sloth.*;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lab.idioglossia.jsonsloth.JsonSlothStorage;
 import lab.idioglossia.sloth.SlothStorage;
@@ -73,6 +67,12 @@ public class ApplicationConfiguration {
     @Bean
     public UserRepository userRepository(JsonSlothManager jsonSlothManager){
         return new SlothUserRepository(jsonSlothManager);
+    }
+
+    @DependsOn("slothStorage")
+    @Bean
+    public FileRepository fileRepository(SlothStorage slothStorage){
+        return new SlothFileRepository(slothStorage);
     }
 
 }
