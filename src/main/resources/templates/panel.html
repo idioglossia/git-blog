@@ -6,126 +6,90 @@
     <title>Git Blog - Panel</title>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
-    <!-- Main content -->
-    <section layout:fragment="content" class="content">
-        <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
-            <div class="row">
-                <div class="col-lg-4 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3 th:text="${reposize.get('post')}">150</h3>
-                            <p>Posts</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-android-create"></i>
-                        </div>
-                        <a th:href="@{/panel/posts}" class="small-box-footer">See lits <i class="fas fa-arrow-circle-right"></i></a>
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3 th:text="${reposize.get('post')}">150</h3>
+                        <p>Posts</p>
                     </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3 th:text="${reposize.get('tag')}">200</h3>
-                            <p>Tags</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-android-document"></i>
-                        </div>
-                        <a th:href="@{/panel/tags}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
+                    <div class="icon">
+                        <i class="ion ion-android-create"></i>
                     </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-4 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3 th:text="${reposize.get('user')}">44</h3>
-                            <p>Users</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a th:href="@{/panel/users}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
+                    <a th:href="@{/panel/posts}" class="small-box-footer">See lits <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3 th:text="${reposize.get('tag')}">200</h3>
+                        <p>Tags</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-android-document"></i>
+                    </div>
+                    <a th:href="@{/panel/tags}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-4 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3 th:text="${reposize.get('user')}">44</h3>
+                        <p>Users</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-person-add"></i>
+                    </div>
+                    <a th:href="@{/panel/users}" class="small-box-footer">See list <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
 
-            <h2>Blog History</h2>
-            <!-- Timelime example  -->
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- The time line -->
-                    <div class="timeline">
-                        <!-- timeline time label -->
-                        <div class="time-label">
-                            <span th:text="${today}" class="bg-green"></span>
-                        </div>
-                        <!-- /.timeline-label -->
-                        <!-- timeline item -->
-                        <div th:each="history: ${histories}">
-                            <i th::class="${history.getIcon().getFullClass()}"></i>
-                            <div class="timeline-item">
-                                <span class="time"><i class="fas fa-clock"></i> [[${#dates.format(history.date, 'dd-MM-yyyy HH:mm')}]]</span>
-                                <h3 class="timeline-header"><a th:href="${history.titleLink.link}" th:text="${history.titleLink.text}"></a> [[${history.titleAction}]]</h3>
+        <h2>Blog History</h2>
+        <!-- Timelime example  -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- The time line -->
+                <div class="timeline">
+                    <!-- timeline time label -->
+                    <div class="time-label">
+                        <span th:text="${today}" class="bg-green"></span>
+                    </div>
+                    <!-- /.timeline-label -->
+                    <!-- timeline item -->
+                    <div th:each="history: ${histories}">
+                        <i th::class="${history.getIcon().getFullClass()}"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fas fa-clock"></i> [[${#dates.format(history.date, 'dd-MM-yyyy HH:mm')}]]</span>
+                            <h3 class="timeline-header"><a th:href="${history.titleLink.link}" th:text="${history.titleLink.text}"></a> [[${history.titleAction}]]</h3>
 
-                                <div class="timeline-body" th:text="${history.description}"></div>
+                            <div class="timeline-body" th:text="${history.description}"></div>
 
-                                <div th:if="${history.button}" class="timeline-footer">
-                                    <a th:href="${history.button.link}" th:text="${history.button.text}" class="btn btn-primary btn-sm"></a>
-                                </div>
+                            <div th:if="${history.button}" class="timeline-footer">
+                                <a th:href="${history.button.link}" th:text="${history.button.text}" class="btn btn-primary btn-sm"></a>
                             </div>
                         </div>
-                        <!-- END timeline item -->
+                    </div>
+                    <!-- END timeline item -->
 
 
-                        <div>
-                            <i class="fas fa-clock bg-gray"></i>
-                        </div>
+                    <div>
+                        <i class="fas fa-clock bg-gray"></i>
                     </div>
                 </div>
-                <!-- /.col -->
             </div>
-        </div><!-- /.container-fluid -->
-    </section>
-</div>
-<!-- /.content-wrapper -->
-<footer class="main-footer">
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> git-blog-v1.0.0
-    </div>
-</footer>
-
-<!-- Control Sidebar -->
-<aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-</aside>
-<!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery -->
-<script th:src="@{plugins/jquery/jquery.min.js}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script th:src="@{plugins/jquery-ui/jquery-ui.min.js}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<!-- overlayScrollbars -->
-<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
-<!-- AdminLTE App -->
-<script th:src="@{/dist/js/adminlte.min.js}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script th:src="@{/dist/js/pages/dashboard.js}"></script>
-<!-- AdminLTE for demo purposes -->
-<script th:src="@{/dist/js/demo.js}"></script>
+            <!-- /.col -->
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
 </body>
 </html>

@@ -7,17 +7,38 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 @Service
 @Profile("initialized")
-public class PanelUserService {
+public class UserService {
     private final UserRepository userRepository;
+    private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public PanelUserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public UserEntity getCurrentUser(){
         return userRepository.get(getUsername());
+    }
+
+    public synchronized List<UserEntity> getUsersList(){
+        if(keysCache.size() == 0){
+            setKeyCache();
+        }
+        List<UserEntity> userEntities = new ArrayList<>();
+        keysCache.forEach(key -> {
+            userEntities.add(userRepository.get(key));
+        });
+        return userEntities;
+    }
+
+    private synchronized void setKeyCache() {
+        keysCache.clear();
+        keysCache.addAll(userRepository.keys());
     }
 
     private String getUsername(){
@@ -27,4 +48,6 @@ public class PanelUserService {
         }
         return principal.toString();
     }
+
+
 }

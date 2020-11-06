@@ -19,6 +19,7 @@ import static lab.idioglossia.gitblog.model.Role.ADMIN;
 public class UserEntity {
     @JsonSlothId
     private String username;
+    private String name;
     private String password;
     private String gravatarUrl;
     private String bio;

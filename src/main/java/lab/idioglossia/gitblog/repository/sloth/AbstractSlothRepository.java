@@ -26,6 +26,10 @@ public class AbstractSlothRepository<K, E> {
         return jsonSlothManager.size(eClass);
     }
 
+    public List<K> keys(){
+        return jsonSlothManager.getKeys(eClass);
+    }
+
     public List<E> get(int f, int t){
         List<E> list = new ArrayList<>();
         for(int i = f; i <= t; i++){
