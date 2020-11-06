@@ -23,8 +23,7 @@ public class PanelController {
 
     @GetMapping("/panel")
     public ModelAndView home() {
-        Map<String, Object> model = new HashMap<>();
-        model.put("currentUser", userService.getCurrentUser());
+        Map<String, Object> model = getBaseModel("Home");
         model.put("today", panelHomeService.getTodayDateString());
         model.put("reposize", panelHomeService.getRepositorySizes());
         model.put("histories", panelHomeService.getHistories());
@@ -33,9 +32,16 @@ public class PanelController {
 
     @GetMapping("/panel/users")
     public ModelAndView users(){
-        Map<String, Object> model = new HashMap<>();
-        model.put("currentUser", userService.getCurrentUser());
+        Map<String, Object> model = getBaseModel("Users");
         model.put("users", userService.getUsersList());
         return new ModelAndView("users", model);
+    }
+
+
+    private Map<String, Object> getBaseModel(String page){
+        Map<String, Object> model = new HashMap<>();
+        model.put("currentUser", userService.getCurrentUser());
+        model.put("curentPage", page);
+        return model;
     }
 }
