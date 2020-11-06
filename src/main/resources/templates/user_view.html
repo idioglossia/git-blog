@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}">
+<head>
+    <title>Git Blog - [[${user.username}]]</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Profile Image -->
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img th:if="${user.gravatarUrl != null}" class="profile-user-img img-fluid img-circle"
+                                 th:src="${user.gravatarUrl}"
+                                 alt="User profile picture">
+
+                            <img th:if="${user.gravatarUrl == null}" class="profile-user-img img-fluid img-circle"
+                                 th:src="@{/dist/img/boxed-bg.jpg}"
+                                 alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center" th:text="${user.name}"></h3>
+
+                        <p class="text-muted text-center" th:text="${user.title}"></p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Posts</b> <a class="float-right" th:text="${user.postIds.size()}"></a>
+                            </li>
+                        </ul>
+
+                        <a href="#" th:if="${currentUser.username.equals(user.username) || currentUser.isAdmin()}" class="btn btn-primary btn-block"><b>Edit</b></a>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.Profile Image -->
+
+
+                <!-- About Me Box -->
+                <div class="card card-gray-dark">
+                    <div class="card-header">
+                        <h3 class="card-title">About Me</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <strong><i class="far fa-file-alt mr-1"></i> Bio</strong>
+
+                        <p class="text-muted" th:text="${user.bio}"></p>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+            </div>
+
+
+
+            <!-- Posts box -->
+            <div class="card col-md-9">
+                <div class="card-header">
+                    <h3 class="card-title">Posts</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%">
+                                #
+                            </th>
+                            <th style="width: 50%">
+                                Title
+                            </th>
+                            <th style="width: 20%">
+                                Creation Date
+                            </th>
+                            <th style="width: 40%">
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+        </div>
+
+    </div>
+</section>
+</body>
+</html>

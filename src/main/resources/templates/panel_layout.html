@@ -35,7 +35,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image" th:if="${currentUser.gravatarUrl != null}">
-                    <img src="" th:src="${currentUser.gravatarUrl}" style="height: 160px; width: 160px;" width="160" height="160" class="img-circle elevation-2" alt="User Image">
+                    <img src="" th:src="${currentUser.gravatarUrl}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="image" th:if="${currentUser.gravatarUrl == null}">
                     <img src="" th:src="@{/dist/img/boxed-bg.jpg}" class="img-circle elevation-2" alt="User Image">

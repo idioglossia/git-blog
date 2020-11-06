@@ -5,6 +5,7 @@ import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -35,6 +36,13 @@ public class PanelController {
         Map<String, Object> model = getBaseModel("Users");
         model.put("users", userService.getUsersList());
         return new ModelAndView("users", model);
+    }
+
+    @GetMapping("/panel/users/{username}")
+    public ModelAndView user(@PathVariable(value = "username") String username){
+        Map<String, Object> model = getBaseModel("User (" + username + ")");
+        model.put("user", userService.getUser(username));
+        return new ModelAndView("user_view", model);
     }
 
 

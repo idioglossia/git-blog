@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.get(getUsername());
     }
 
+    public UserEntity getUser(String username){
+        return userRepository.get(username);
+    }
+
     public synchronized List<UserEntity> getUsersList(){
         if(keysCache.size() == 0){
             setKeyCache();

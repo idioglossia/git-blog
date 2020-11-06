@@ -5,6 +5,7 @@ import lab.idioglossia.jsonsloth.JsonSlothId;
 import lab.idioglossia.sloth.Collection;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,12 @@ public class UserEntity {
     private String name;
     private String password;
     private String gravatarUrl;
+    private String title;
     private String bio;
     private String website;
     private Date creationDate;
     private List<String> authorities;
+    private List<Integer> postIds = new ArrayList<>();
 
     public boolean isAdmin(){
         return authorities.contains(ADMIN);
