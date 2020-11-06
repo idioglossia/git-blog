@@ -15,11 +15,11 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img th:if="${user.gravatarUrl != null}" class="profile-user-img img-fluid img-circle"
-                                 th:src="${user.gravatarUrl}"
+                            <img th:if="${currentUser.profilePicture != null}" class="profile-user-img img-fluid img-circle"
+                                 th:src="@{/db/images/{pp}(pp=${currentUser.profilePicture})}"
                                  alt="User profile picture">
 
-                            <img th:if="${user.gravatarUrl == null}" class="profile-user-img img-fluid img-circle"
+                            <img th:if="${currentUser.profilePicture == null}" class="profile-user-img img-fluid img-circle"
                                  th:src="@{/dist/img/boxed-bg.jpg}"
                                  alt="User profile picture">
                         </div>
