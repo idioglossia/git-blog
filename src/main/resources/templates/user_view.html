@@ -30,7 +30,7 @@
 
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
-                                <b>Posts</b> <a class="float-right" th:text="${user.postIds.size()}"></a>
+                                <b>Posts</b> <a class="float-right" th:text="${user.postIds != null ? user.postIds.size() : 0}"></a>
                             </li>
                         </ul>
 

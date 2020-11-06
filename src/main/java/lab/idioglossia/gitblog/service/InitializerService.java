@@ -78,10 +78,12 @@ public class InitializerService {
     public Git initGit(String address, String ref) throws IOException, GitAPIException {
         Repository repository = new FileRepositoryBuilder()
                 .setGitDir(new File(address + (address.endsWith("/") ? ".git" : "/.git")))
+                .readEnvironment()
                 .build();
         Git git = new Git(repository);
         git.checkout().addPath(ref).call();
-//        git.fetch().call();
+        String[] cmd = { "/bin/sh", "-c", "cd "+address+"; git pull" };
+        Runtime.getRuntime().exec(cmd);
         return git;
     }
 

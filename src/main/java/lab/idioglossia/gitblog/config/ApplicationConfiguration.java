@@ -8,6 +8,10 @@ import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lab.idioglossia.jsonsloth.JsonSlothStorage;
 import lab.idioglossia.sloth.SlothStorage;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -73,6 +77,19 @@ public class ApplicationConfiguration {
     @Bean
     public FileRepository fileRepository(SlothStorage slothStorage){
         return new SlothFileRepository(slothStorage);
+    }
+
+    @DependsOn("configModel")
+    @Bean
+    public Git git(ConfigModel configModel) throws IOException, GitAPIException {
+        Repository repository = new FileRepositoryBuilder()
+                .setGitDir(new File(configModel.getAddress() + (configModel.getAddress().endsWith("/") ? ".git" : "/.git")))
+                .build();
+        Git git = new Git(repository);
+        git.checkout().addPath(configModel.getReference()).call();
+        String[] cmd = { "/bin/sh", "-c", "cd "+configModel.getAddress()+"; git pull" };
+        Runtime.getRuntime().exec(cmd);
+        return git;
     }
 
 }
