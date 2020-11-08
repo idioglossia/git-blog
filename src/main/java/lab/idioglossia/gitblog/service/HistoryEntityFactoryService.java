@@ -57,4 +57,19 @@ public class HistoryEntityFactoryService {
                 .build();
     }
 
+    public HistoryEntity userProfileAdded(String username) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleAction(" now has a profile in Git Blog!")
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel/users/" + username)
+                        .text(username)
+                        .build())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-green")
+                        .iconClass("fa-user")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
 }

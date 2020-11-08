@@ -1,5 +1,6 @@
 package lab.idioglossia.gitblog.controller;
 
+import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
 import lab.idioglossia.gitblog.service.panel.UserService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,25 +62,21 @@ public class PanelController {
         return getEditUser(username);
     }
 
-    /*@PostMapping("/panel/users/edit/{username}")
-    public ModelAndView doEditUser(@PathVariable(value = "username") String username,
-                                   @RequestParam(value = "title", required = false) String title,
-                                   @RequestParam(value = "name", required = false) String name,
-                                   @RequestParam(value = "password", required = false) String password,
-                                   @RequestParam(value = "website", required = false) String website,
-                                   @RequestParam(value = "bio", required = false) String bio,
-                                   @RequestParam(value = "profilePicture", required = false) MultipartFile profilePicture
-    ){
-        userService.editUser(username, UserEditDto.builder()
-                .title(title)
-                .bio(bio)
-                .name(name)
-                .password(password)
-                .profilePicture(profilePicture)
-                .website(website)
-                .build());
-        return getEditUser(username);
-    }*/
+    @GetMapping("/panel/users/new")
+    public ModelAndView getAddNewUser(){
+        Map<String, Object> model = getBaseModel("Add User");
+        return new ModelAndView("user_add", model);
+    }
+
+    @PostMapping("/panel/users/new")
+    public ModelAndView addNewUser(@Valid UserAddDto userAddDto){
+        boolean added = userService.addUser(userAddDto);
+        if(added){
+            return new ModelAndView("redirect:/panel/users/"+userAddDto.getUsername());
+        }else {
+            return new ModelAndView("redirect:/panel/users/new");
+        }
+    }
 
     private Map<String, Object> getBaseModel(String page){
         Map<String, Object> model = new HashMap<>();

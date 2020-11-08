@@ -1,5 +1,7 @@
 package lab.idioglossia.gitblog.service.panel;
 
+import lab.idioglossia.gitblog.model.Role;
+import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.repository.FileRepository;
@@ -16,9 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -103,6 +103,11 @@ public class UserService {
         keysCache.forEach(key -> {
             userEntities.add(userRepository.get(key));
         });
+        userEntities.sort(new Comparator<UserEntity>() {
+            public int compare(UserEntity o1, UserEntity o2) {
+                return o1.getCreationDate().compareTo(o2.getCreationDate());
+            }
+        });
         return userEntities;
     }
 
@@ -124,6 +129,30 @@ public class UserService {
         userEditor.editUser(userEntity);
         userRepository.update(userEntity);
         return userEntity;
+    }
+
+    public synchronized boolean addUser(UserAddDto userAddDto) {
+        if (getUser(userAddDto.getUsername()) == null) {
+            List<String> auths = new ArrayList<>();
+            auths.add(Role.USER);
+            if(userAddDto.isAdmin()){
+                auths.add(Role.ADMIN);
+            }
+            userRepository.save(UserEntity.builder()
+                    .username(userAddDto.getUsername())
+                    .creationDate(new Date())
+                    .password(passwordEncoder.encode(userAddDto.getPassword()))
+                    .authorities(auths)
+                    .name(userAddDto.getName())
+                    .title(userAddDto.getTitle())
+                    .website(userAddDto.getWebsite())
+                    .build());
+            setKeyCache();
+            historyRepository.save(historyEntityFactoryService.userProfileAdded(userAddDto.getUsername()));
+            gitService.addAndCommit("Added new user " + userAddDto.getUsername());
+            return true;
+        }
+        return false;
     }
 
     public interface UserEditor {

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}">
+<head>
+    <title>Git Blog - Add user</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Add User</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form role="form" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Enter Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="website">Website Link</label>
+                        <input type="text" name="website" class="form-control" id="website" placeholder="Personal Website">
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea class="form-control" name="bio" id="bio" placeholder="Bio" maxlength="300"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" id="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="admin" id="adminCheck">
+                        <label class="form-check-label" for="adminCheck">Is Admin</label>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+
+    </div>
+</section>
+</body>
+</html>
