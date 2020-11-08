@@ -22,6 +22,10 @@ public class AbstractSlothRepository<K, E> {
         jsonSlothManager.update(e);
     }
 
+    public void delete(E e){
+        jsonSlothManager.delete(e);
+    }
+
     public E get(K k){
         return jsonSlothManager.get(k, eClass);
     }

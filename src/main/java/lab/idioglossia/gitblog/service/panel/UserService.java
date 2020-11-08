@@ -154,6 +154,18 @@ public class UserService {
         return false;
     }
 
+    public synchronized boolean deleteUser(String username) {
+        UserEntity user = getUser(username);
+        if(user != null){
+            userRepository.delete(user);
+            setKeyCache();
+            historyRepository.save(historyEntityFactoryService.userProfileRemoved(username));
+            gitService.addAndCommit("Removed user " + username);
+            return true;
+        }
+        return false;
+    }
+
     public interface UserEditor {
         void editUser(UserEntity userEntity);
     }

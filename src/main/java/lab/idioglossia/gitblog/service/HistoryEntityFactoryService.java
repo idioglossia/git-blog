@@ -72,4 +72,20 @@ public class HistoryEntityFactoryService {
                         .build())
                 .build();
     }
+
+    public HistoryEntity userProfileRemoved(String username) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleAction(" is removed from Git Blog!")
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel")
+                        .text(username)
+                        .build())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-danger")
+                        .iconClass("fa-user")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
 }

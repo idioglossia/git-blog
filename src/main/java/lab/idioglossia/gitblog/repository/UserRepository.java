@@ -10,4 +10,5 @@ public interface UserRepository {
     int size();
     List<String> keys();
     UserEntity get(String name);
+    void delete(UserEntity userEntity);
 }
