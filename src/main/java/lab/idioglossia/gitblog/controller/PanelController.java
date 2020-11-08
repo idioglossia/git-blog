@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @Profile("initialized")
-public class PanelController {
+public class PanelController extends AbstractPanelController {
     private final PanelHomeService panelHomeService;
     private final UserService userService;
 
     public PanelController(PanelHomeService panelHomeService, UserService userService) {
+        super(userService);
         this.panelHomeService = panelHomeService;
         this.userService = userService;
     }
@@ -83,12 +83,5 @@ public class PanelController {
         }else {
             return getAddNewUser(true);
         }
-    }
-
-    private Map<String, Object> getBaseModel(String page){
-        Map<String, Object> model = new HashMap<>();
-        model.put("currentUser", userService.getCurrentUser());
-        model.put("currentPage", page);
-        return model;
     }
 }

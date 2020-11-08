@@ -16,7 +16,7 @@
     <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
-
+    <th:block layout:fragment="stylesheets"></th:block>
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -158,14 +158,15 @@
 </script>
 <!-- Bootstrap 4 -->
 <script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/js/panel.js}"></script>
 <!-- overlayScrollbars -->
 <script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
 <!-- AdminLTE App -->
 <script th:src="@{/dist/js/adminlte.min.js}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script th:src="@{/dist/js/pages/dashboard.js}"></script>
-<!-- AdminLTE for demo purposes -->
-<script th:src="@{/dist/js/demo.js}"></script>
+
+<th:block layout:fragment="scripts">
+
+</th:block>
+
+<script th:src="@{/js/panel.js}"></script>
 </body>
 </html>
