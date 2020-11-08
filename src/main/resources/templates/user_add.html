@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{panel_layout}">
+      layout:decorate="~{panel_layout}" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <title>Git Blog - Add user</title>
 </head>
@@ -50,6 +50,7 @@
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+                <p th:if="${fail}" class="text-danger">failed to add user to db!</p>
             </form>
         </div>
         <!-- /.card -->

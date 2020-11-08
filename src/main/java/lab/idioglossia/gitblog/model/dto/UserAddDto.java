@@ -25,4 +25,8 @@ public class UserAddDto {
     private String bio;
     private String title;
     private boolean admin;
+
+    public String getUsername() {
+        return username == null ? null : username.toLowerCase();
+    }
 }

@@ -60,7 +60,6 @@ public class UserService {
         UserEntity userEntity = editUser(username, new UserEditor() {
             @Override
             public void editUser(UserEntity userEntity) {
-                System.out.println(userEntity);
                 atomicHash.set(userEntity.hashCode());
                 userEntity.setBio(userEditDto.getBio());
                 userEntity.setName(userEditDto.getName());

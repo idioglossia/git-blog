@@ -63,8 +63,12 @@ public class PanelController {
     }
 
     @GetMapping("/panel/users/new")
-    public ModelAndView getAddNewUser(){
+    public ModelAndView getAddNewUser(boolean failed){
         Map<String, Object> model = getBaseModel("Add User");
+        if(failed){
+            System.out.println("Failed!");
+            model.put("fail", true);
+        }
         return new ModelAndView("user_add", model);
     }
 
@@ -74,7 +78,7 @@ public class PanelController {
         if(added){
             return new ModelAndView("redirect:/panel/users/"+userAddDto.getUsername());
         }else {
-            return new ModelAndView("redirect:/panel/users/new");
+            return getAddNewUser(true);
         }
     }
 
