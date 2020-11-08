@@ -5,6 +5,7 @@ import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,6 +63,7 @@ public class PanelController {
         return getEditUser(username);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/panel/users/new")
     public ModelAndView getAddNewUser(boolean failed){
         Map<String, Object> model = getBaseModel("Add User");
@@ -72,6 +74,7 @@ public class PanelController {
         return new ModelAndView("user_add", model);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/panel/users/new")
     public ModelAndView addNewUser(@Valid UserAddDto userAddDto){
         boolean added = userService.addUser(userAddDto);
