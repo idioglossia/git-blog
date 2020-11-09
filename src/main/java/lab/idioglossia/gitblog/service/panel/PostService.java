@@ -1,7 +1,6 @@
 package lab.idioglossia.gitblog.service.panel;
 
 import lab.idioglossia.gitblog.model.PostPreview;
-import lab.idioglossia.gitblog.model.UserPreview;
 import lab.idioglossia.gitblog.model.dto.PostDto;
 import lab.idioglossia.gitblog.model.entity.PostEntity;
 import lab.idioglossia.gitblog.model.entity.TagEntity;
@@ -107,7 +106,8 @@ public class PostService {
             });
         });
         postRepository.delete(postEntity);
-
+        historyRepository.save(historyEntityFactoryService.postDeleted(userService.getCurrentUsername(), postEntity));
+        gitService.addAndCommit("Removed a post from " + postEntity.getUsername());
         return true;
     }
 
@@ -131,11 +131,7 @@ public class PostService {
         postEntity.getTags().forEach(tag -> {
             tagsService.editTag(tag, tagEntity -> {
                 tagEntity.getPostIds().add(postEntity.getId());
-                tagEntity.getPosts().add(PostPreview.builder()
-                        .title(postEntity.getTitle())
-                        .user(UserPreview.from(userEntity))
-                        .description(postEntity.getDescription())
-                        .build());
+                tagEntity.getPosts().add(PostPreview.from(postEntity, userEntity));
             });
         });
         userService.editUser(userEntity.getUsername(), userEntity1 -> {
@@ -151,8 +147,59 @@ public class PostService {
         return postEntity;
     }
 
+    public PostEntity editPost(Integer id, PostDto postDto) {
+        PostEntity postEntity = postRepository.get(id);
+        if(postEntity == null || (!postEntity.getUsername().equals(userService.getCurrentUsername()) && !UserAuthHelper.isCurrentUserAdmin()))
+            return null;
+
+        UserEntity userEntity = userService.getUser(postEntity.getUsername());
+
+        handleCover(postDto, postEntity);
+        postEntity.setContent(postDto.getContent());
+        postEntity.setDescription(postDto.getDescription());
+        postEntity.setTitle(postDto.getTitle());
+        postEntity.setFollowUpButton(getFollowUpButton(postDto));
+
+        List<String> tags = getTags(postDto);
+        List<String> removedTags = new ArrayList<>(postEntity.getTags());
+        removedTags.removeAll(tags);
+        removedTags.forEach(tag -> {
+            tagsService.editTag(tag, new TagsService.TagEditor() {
+                @Override
+                public void edit(TagEntity tagEntity) {
+                    tagEntity.getPostIds().remove(id);
+                    for (PostPreview postPreview : tagEntity.getPosts()) {
+                        if(postPreview.getId().equals(id)){
+                            tagEntity.getPosts().remove(postPreview);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+
+        List<String> newTags = new ArrayList<>(tags);
+        newTags.removeAll(postEntity.getTags());
+        newTags.forEach(tag -> {
+            tagsService.editTag(tag, tagEntity -> {
+                tagEntity.getPostIds().add(postEntity.getId());
+                tagEntity.getPosts().add(PostPreview.from(postEntity, userEntity));
+            });
+        });
+        postEntity.setTags(tags);
+
+        postRepository.update(postEntity);
+        historyRepository.save(historyEntityFactoryService.postUpdated(userEntity, postEntity));
+        gitService.addAndCommit("Post updated by" + userEntity.getUsername());
+
+        return postEntity;
+    }
+
     private void handleCover(PostDto postDto, PostEntity postEntity) {
         if(postDto.isRemoveCover()){
+            if (postEntity.getCover() != null) {
+                fileRepository.removeFile("images", postEntity.getCover());
+            }
             postEntity.setCover(null);
             return;
         }
@@ -198,5 +245,4 @@ public class PostService {
         }
         return null;
     }
-
 }

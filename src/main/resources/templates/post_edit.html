@@ -75,6 +75,11 @@
                         <label class="form-check-label" for="removeCover">Delete Cover</label>
                         <small id="removeCoverHelp" class="form-text text-muted">Only use to remove cover when you havent selected a new cover image, Otherwise your new cover won't be saved. By default new cover overrides old one.</small>
                     </div>
+                    <div th:if="${post.cover != null}">
+                        <img  class="img-fluid" style="width: 30%"
+                             th:src="@{/db/images/{img}(img=${post.cover})}"
+                             alt="Post Cover">
+                    </div>
 
                 </div>
                 <!-- /.card-body -->

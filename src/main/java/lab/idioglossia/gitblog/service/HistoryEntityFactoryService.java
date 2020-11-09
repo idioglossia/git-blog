@@ -143,4 +143,42 @@ public class HistoryEntityFactoryService {
                         .build())
                 .build();
     }
+
+    public HistoryEntity postDeleted(String username, PostEntity postEntity) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleAction(" Removed a post from "+postEntity.getUsername()+": " + postEntity.getTitle())
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel/users/"+username)
+                        .text(username)
+                        .build())
+                .description(postEntity.getDescription())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-danger")
+                        .iconClass("fa-file-word")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
+
+    public HistoryEntity postUpdated(UserEntity userEntity, PostEntity postEntity) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel/users/"+userEntity.getUsername())
+                        .text(userEntity.getUsername())
+                        .build())
+                .titleAction(" updated post: " + postEntity.getTitle())
+                .description(postEntity.getDescription())
+                .button(HistoryEntity.Button.builder()
+                        .text("See Post")
+                        .link("/panel/posts/" + postEntity.getId())
+                        .build())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-info")
+                        .iconClass("fa-file-word")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
 }

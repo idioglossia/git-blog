@@ -36,7 +36,7 @@ public class PostController extends AbstractPanelController{
     @PostMapping("/panel/posts/edit/{id}")
     public ModelAndView editPost(@PathVariable Integer id, @Valid PostDto postDto){
         Map<String, Object> model = getBaseModel("Post");
-        model.put("post", postService.getPost(id));
+        model.put("post", postService.editPost(id, postDto));
         return new ModelAndView("post_edit", model);
     }
 

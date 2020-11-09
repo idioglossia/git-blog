@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface PostRepository {
     void save(PostEntity postEntity);
+    void update(PostEntity postEntity);
     void delete(PostEntity postEntity);
     int size();
     PostEntity get(Integer id);
