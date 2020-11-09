@@ -41,6 +41,7 @@ public class PostService {
         int to = (page + 1) * pageSize;
 
         List<Integer> keys = userEntity.getPostIds();
+        Collections.reverse(keys);
 
         List<PostEntity> postEntities = new ArrayList<>();
         for(int i = from; i < to && i < keys.size(); i++){
