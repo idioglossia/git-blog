@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -21,6 +23,15 @@ public class PostController extends AbstractPanelController{
     public PostController(UserService userService, PostService postService) {
         super(userService);
         this.postService = postService;
+    }
+
+    @GetMapping("/panel/posts")
+    public ModelAndView getPosts(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+        Map<String, Object> model = getBaseModel("Posts");
+        List<PostEntity> posts = postService.getPosts(page, pageSize);
+        model.put("posts", posts);
+        model.put("page", page);
+        return new ModelAndView("posts", model);
     }
 
     @GetMapping("/panel/posts/new")

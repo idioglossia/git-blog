@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}">
+<head>
+    <title>Git Blog - Users</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Posts</h3>
+                <div class="card-tools">
+                    <a th:if="${page > 10}" th:href="@{'/panel/posts?page=' + ${page - 1}}" class="btn btn-tool">Previous</a>
+                    <a th:if="${posts.size() == 10}" th:href="@{'/panel/posts?page=' + ${page + 1}}" class="btn btn-tool">Next</a>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped projects">
+                    <thead>
+                    <tr>
+                        <th style="width: 10%">
+                            #
+                        </th>
+                        <th style="width: 30%">
+                            Title
+                        </th>
+                        <th style="width: 20%">
+                            Creation Date
+                        </th>
+                        <th style="width: 20%" class="text-center">
+                            By
+                        </th>
+                        <th style="width: 20%">
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="post: ${posts}">
+                    <tr>
+                        <td th:text="${postStat.index}">
+                        </td>
+                        <td>
+                            <a th:text="${post.title}">
+                            </a>
+                            <br/>
+                            <small th:text="${post.getDescriptionSub(20)}">
+
+                            </small>
+                        </td>
+                        <td>
+                            Created [[${#dates.format(post.date, 'dd-MM-yyyy')}]]
+                        </td>
+                        <td class="text-center">
+                            <a class="text-blue" th:text="${post.username}" th:href="@{/panel/users/{username}(username = ${post.username})}"></a>
+                        </td>
+                        <td class="project-actions text-right">
+                            <a class="btn btn-primary btn-sm" th:href="@{/panel/posts/{postId}(postId = ${post.id})}">
+                                <i class="fas fa-folder">
+                                </i>
+                                View
+                            </a>
+                            <a th:if="${currentUser.getUsername().equals(post.username)}" class="btn btn-info btn-sm" th:href="@{/panel/posts/edit/{postId}(postId = ${post.id})}">
+                                <i class="fas fa-pencil-alt">
+                                </i>
+                                Edit
+                            </a>
+                            <a data-toggle="modal" th:data-delete-type="post" th:data-post-id="${post.id}" th:if="${currentUser.isAdmin() || currentUser.getUsername().equals(post.username)}" class="delete-button btn btn-danger btn-sm" href="#">
+                                <i class="fas fa-trash">
+                                </i>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+
+
+     <!-- modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete post <b id="dataIdHolder"></b>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="delete" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -14,10 +14,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class PostService {
@@ -39,6 +36,39 @@ public class PostService {
         this.gitService = gitService;
     }
 
+    public List<PostEntity> getPosts(UserEntity userEntity, int page, int pageSize){
+        int from = page * pageSize;
+        int to = (page + 1) * pageSize;
+
+        List<Integer> keys = userEntity.getPostIds();
+
+        List<PostEntity> postEntities = new ArrayList<>();
+        for(int i = from; i < to && i < keys.size(); i++){
+            PostEntity postEntity = postRepository.get(keys.get(i));
+            if(postEntity != null)
+                postEntities.add(postEntity);
+        }
+
+        return postEntities;
+    }
+
+    public List<PostEntity> getPosts(int page, int pageSize){
+        int from = page * pageSize;
+        int to = (page + 1) * pageSize;
+
+        List<Integer> keys = postRepository.keys();
+        keys.sort(Integer::compareTo);
+        Collections.reverse(keys);
+
+        List<PostEntity> postEntities = new ArrayList<>();
+        for(int i = from; i < to && i < keys.size(); i++){
+            PostEntity postEntity = postRepository.get(keys.get(i));
+            if(postEntity != null)
+                postEntities.add(postEntity);
+        }
+
+        return postEntities;
+    }
 
     public PostEntity addPost(PostDto postDto){
         UserEntity userEntity = userService.getCurrentUser();

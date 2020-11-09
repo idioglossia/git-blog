@@ -10,6 +10,10 @@ $(document).on("click", ".delete-button", function () {
         case 'tag':
             dataName = $(this).data('tagname');
             deleteUrl = '/api/tags/'+dataName;
+            break;
+        case 'post':
+            dataName = $(this).data('post-id');
+            deleteUrl = '/api/posts/'+dataName;
         break;
     }
 

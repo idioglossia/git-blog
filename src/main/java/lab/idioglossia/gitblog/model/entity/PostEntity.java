@@ -26,6 +26,12 @@ public class PostEntity {
     private List<String> tags;
     private String cover;
 
+    public String getDescriptionSub(int max){
+        if(description == null)
+            return "";
+        return description.substring(0, Math.min(description.length(), max));
+    }
+
     @Getter
     @Setter
     @Builder

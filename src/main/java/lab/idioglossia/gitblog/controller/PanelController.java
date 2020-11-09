@@ -2,7 +2,9 @@ package lab.idioglossia.gitblog.controller;
 
 import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
+import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
+import lab.idioglossia.gitblog.service.panel.PostService;
 import lab.idioglossia.gitblog.service.panel.TagsService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.context.annotation.Profile;
@@ -22,12 +24,14 @@ import java.util.Map;
 public class PanelController extends AbstractPanelController {
     private final PanelHomeService panelHomeService;
     private final UserService userService;
+    private final PostService postService;
     private final TagsService tagsService;
 
-    public PanelController(PanelHomeService panelHomeService, UserService userService, TagsService tagsService) {
+    public PanelController(PanelHomeService panelHomeService, UserService userService, PostService postService, TagsService tagsService) {
         super(userService);
         this.panelHomeService = panelHomeService;
         this.userService = userService;
+        this.postService = postService;
         this.tagsService = tagsService;
     }
 
@@ -48,9 +52,12 @@ public class PanelController extends AbstractPanelController {
     }
 
     @GetMapping("/panel/users/{username}")
-    public ModelAndView user(@PathVariable(value = "username") String username){
+    public ModelAndView user(@PathVariable(value = "username") String username, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
         Map<String, Object> model = getBaseModel("User (" + username + ")");
-        model.put("user", userService.getUser(username));
+        UserEntity userEntity = userService.getUser(username);
+        model.put("user", userEntity);
+        model.put("posts", postService.getPosts(userEntity, page, pageSize));
+
         return new ModelAndView("user_view", model);
     }
 
