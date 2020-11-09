@@ -7,6 +7,7 @@ import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,20 @@ public class PostController extends AbstractPanelController{
     public PostController(UserService userService, PostService postService) {
         super(userService);
         this.postService = postService;
+    }
+
+    @GetMapping("/panel/posts/edit/{id}")
+    public ModelAndView getPostEdit(@PathVariable Integer id){
+        Map<String, Object> model = getBaseModel("Post");
+        model.put("post", postService.getPost(id));
+        return new ModelAndView("post_edit", model);
+    }
+
+    @PostMapping("/panel/posts/edit/{id}")
+    public ModelAndView editPost(@PathVariable Integer id, @Valid PostDto postDto){
+        Map<String, Object> model = getBaseModel("Post");
+        model.put("post", postService.getPost(id));
+        return new ModelAndView("post_edit", model);
     }
 
     @GetMapping("/panel/posts")

@@ -38,6 +38,10 @@ public class PostService {
         this.gitService = gitService;
     }
 
+    public PostEntity getPost(Integer id){
+        return postRepository.get(id);
+    }
+
     public List<PostEntity> getPosts(UserEntity userEntity, int page, int pageSize){
         int from = page * pageSize;
         int to = (page + 1) * pageSize;

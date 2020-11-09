@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Git Blog - Add user</title>
+    <th:block layout:fragment="stylesheets">
+        <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+        <link rel="stylesheet" th:href="@{/css/tag.css}">
+    </th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Add New Post</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form role="form" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input th:value="${post.title}" type="text" name="title" class="form-control" id="title" placeholder="Enter title of post" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input th:value="${post.description}" type="text" name="description" class="form-control" id="description" placeholder="Enter short description for post" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="hidden" id="hiddenContent" th:value="${post.content}" hidden>
+                        <label for="content">Content</label>
+                        <textarea id="content" name="content" class="summernote" placeholder="Place some text here"
+                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Follow Up Link</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input th:value="${post.followUpButton != null ? post.followUpButton.link : ''}" type="text" name="followUpLink" class="form-control" placeholder="Follow up link">
+                        </div>
+                        <div class="col-md-6">
+                            <input th:value="${post.followUpButton != null ? post.followUpButton.text : ''}" type="text" name="followUpText" class="form-control" placeholder="Follow up text">
+                        </div>
+                        <div class="col-12">
+                            <small class="form-text text-muted">You can add a button below your post to direct readers to some other link. Set text and link of that button here.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">tags</label>
+                        <input th:value="${post.tagsCombined()}" type="text" name="tags" class="form-control" id="tags" placeholder="Enter Tags" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coverImage">Cover Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" name="coverImage" class="custom-file-input" id="coverImage" accept="image/*" onchange='$("#coverImageHelp").html($(this).val()); $("#coverImageClean").show()'>
+                                <label class="custom-file-label" for="coverImage">Choose file</label>
+                            </div>
+                        </div>
+                        <button id="coverImageClean" type="button" class="btn btn-light" onclick="$('#coverImage').val(null); $('#coverImageHelp').html(''); $(this).hide()">Clean</button>
+                        <small class='form-text text-cyan' id="coverImageHelp"></small>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="removeCover" id="removeCover">
+                        <label class="form-check-label" for="removeCover">Delete Cover</label>
+                        <small id="removeCoverHelp" class="form-text text-muted">Only use to remove cover when you havent selected a new cover image, Otherwise your new cover won't be saved. By default new cover overrides old one.</small>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.card -->
+
+    </div>
+</section>
+<th:block layout:fragment="scripts">
+<script>
+    $(function () {
+        $("#coverImageClean").hide();
+    });
+</script>
+<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+<script>
+    $('.summernote').summernote({
+        placeholder: 'Your post content here',
+        tabsize: 2,
+        height: 500,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+    var val = $("#hiddenContent").val();
+    $('.summernote').summernote('code', val);
+</script>
+<script th:src="@{/js/tag.js}"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url: '/api/tags/names',
+            type: 'GET',
+            success: function (result) {
+                console.log(result);
+                $('#tags').tagSuggest({
+                    tags: result,
+                    separator: ', '
+                });
+            },
+        });
+    });
+</script>
+</th:block>
+</body>
+</html>
