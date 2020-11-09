@@ -3,7 +3,7 @@ $(document).on("click", ".delete-button", function () {
     var dataName = null;
     var deleteUrl = null;
     switch (deleteType) {
-        case 'username':
+        case 'user':
             dataName = $(this).data('username');
             deleteUrl = '/api/users/'+dataName;
         break;
