@@ -20,7 +20,7 @@ public class ApiController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/users/{username}/delete")
+    @DeleteMapping("/users/{username}")
     public ApiCallResult deleteUser(@PathVariable String username){
         return new ApiCallResult(userService.deleteUser(username));
     }

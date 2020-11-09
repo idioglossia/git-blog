@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{panel_layout}">
 <head>
-    <title>Git Blog - Users</title>
+    <title>Git Blog - Tags</title>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <!-- Main content -->
@@ -12,9 +12,23 @@
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Users</h3>
+                <h3 class="card-title">Tags</h3>
             </div>
             <div class="card-body p-0">
+                <th:block th:if="${currentUser.isAdmin()}">
+                    <form role="form" method="post" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="tag">Tag Name</label>
+                                <input type="text" name="tag" class="form-control" id="tag" placeholder="Enter New Tag Name" required>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </th:block>
                 <table class="table table-striped projects">
                     <thead>
                     <tr>
@@ -22,49 +36,32 @@
                             #
                         </th>
                         <th style="width: 30%">
-                            Username
+                            Tag Name
                         </th>
                         <th style="width: 20%">
-                            Last Visit
+                            Creation Date
                         </th>
                         <th style="width: 20%" class="text-center">
-                            Roles
+                            Post Counts
                         </th>
                         <th style="width: 20%">
                         </th>
                     </tr>
                     </thead>
-                    <tbody th:each="user: ${users}">
+                    <tbody th:each="tag: ${tags}">
                     <tr>
-                        <td th:text="${userStat.index}">
+                        <td th:text="${tagStat.index}">
                         </td>
-                        <td>
-                            <a th:text="${user.username}">
-                            </a>
-                            <br/>
-                            <small th:text="${user.name}">
-
-                            </small>
+                        <td th:text="${tag.name}">
                         </td>
                         <td>
                             Created [[${#dates.format(user.creationDate, 'dd-MM-yyyy')}]]
                         </td>
                         <td class="text-center"> <!-- class="project-state" -->
-                            <span class="badge badge-info">User</span>
-                            <span th:if="${user.isAdmin()}" class="badge badge-danger">Admin</span>
+                            <span class="badge badge-info" th:if="${tag.getPostIds() != null ? tag.getPostIds().size : 0}">0</span>
                         </td>
                         <td class="project-actions text-right">
-                            <a class="btn btn-primary btn-sm" th:href="@{/panel/users/{username}(username = ${user.username})}">
-                                <i class="fas fa-folder">
-                                </i>
-                                View
-                            </a>
-                            <a th:if="${currentUser.isAdmin()}" class="btn btn-info btn-sm" th:href="@{/panel/users/edit/{username}(username = ${user.username})}">
-                                <i class="fas fa-pencil-alt">
-                                </i>
-                                Edit
-                            </a>
-                            <a data-toggle="modal" th:data-delete-type="user" th:data-username="${user.username}" th:if="${currentUser.isAdmin()}" class="delete-button btn btn-danger btn-sm">
+                            <a data-toggle="modal" th:data-delete-type="tag" th:data-tagname="${tag.name}" th:if="${currentUser.isAdmin()}" class="delete-button btn btn-danger btn-sm">
                                 <i class="fas fa-trash">
                                 </i>
                                 Delete
