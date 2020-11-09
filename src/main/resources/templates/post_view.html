@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}">
+<head>
+    <title>Git Blog - [[${user.username}]]</title>
+    <th:block layout:fragment="stylesheets">
+        <link rel="stylesheet" th:href="@{/css/post.css}">
+    </th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-cyan">
+            <div class="card-header">
+                <h3 class="card-title" th:text="${post.title}"></h3>
+            </div>
+            <div class="post">
+                <div th:if="${post.cover != null}" class="post-cover" th:style="'background-image:url(' + @{/db/images/{pp}((pp=${post.cover}))} + ');'"></div>
+                <div class="user-block">
+                    <img th:if="${user.profilePicture != null}" class="img-circle img-bordered-sm"
+                         th:src="@{/db/images/{pp}(pp=${user.profilePicture})}"
+                         alt="User profile picture">
+
+                    <img th:if="${user.profilePicture == null}" class="img-circle img-bordered-sm"
+                         th:src="@{/dist/img/boxed-bg.jpg}"
+                         alt="User profile picture">
+
+                    <a class="username" th:href="@{/panel/users/{username}(username=${user.username})}" th:text="${user.username}"></a>
+                    <span class="description" th:text="${#dates.format(post.date, 'dd-MM-yyyy HH:mm')}"></span>
+                    <small th:text="${post.description}"></small>
+                </div>
+                <div class="post-content" th:utext="${post.content}">
+                </div>
+                <div class="post-tags">
+                    <th:block th:each="tag : ${post.tags}">
+                        <span class="btn btn-sm btn-info" th:text="${tag}"></span>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

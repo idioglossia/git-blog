@@ -1,0 +1,24 @@
+.post-cover {
+    width: 100%;
+    min-height: 300px;
+    max-height: 400px;
+    background-color: #cfd2d1;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: scroll;
+}
+
+.post {
+    padding: 20px;
+}
+
+.post-tags{
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.post > .user-block {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

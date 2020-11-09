@@ -2,6 +2,7 @@ package lab.idioglossia.gitblog.controller;
 
 import lab.idioglossia.gitblog.model.dto.PostDto;
 import lab.idioglossia.gitblog.model.entity.PostEntity;
+import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.service.panel.PostService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,13 @@ import java.util.Map;
 @Controller
 public class PostController extends AbstractPanelController{
     private final PostService postService;
+    private final UserService userService;
 
     @Autowired
     public PostController(UserService userService, PostService postService) {
         super(userService);
         this.postService = postService;
+        this.userService = userService;
     }
 
     @GetMapping("/panel/posts/edit/{id}")
@@ -47,6 +50,21 @@ public class PostController extends AbstractPanelController{
         model.put("posts", posts);
         model.put("page", page);
         return new ModelAndView("posts", model);
+    }
+
+    @GetMapping("/panel/posts/{id}")
+    public ModelAndView getPost(@PathVariable Integer id){
+        Map<String, Object> model = getBaseModel("Post");
+        PostEntity postEntity = postService.getPost(id);
+        UserEntity userEntity = userService.getUser(postEntity.getUsername());
+        if(userEntity == null){
+            userEntity = userService.getCurrentUser();
+        }
+
+        model.put("post", postEntity);
+        model.put("user", userEntity);
+
+        return new ModelAndView("post_view", model);
     }
 
     @GetMapping("/panel/posts/new")
