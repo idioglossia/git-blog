@@ -19,19 +19,60 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form role="form">
+            <form role="form" method="post" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="username">Title</label>
-                        <input type="text" name="username" class="form-control" id="username" placeholder="Enter Title Of Post" required>
+                        <label for="title">Title</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Enter title of post" required>
                     </div>
 
-                    <textarea class="summernote" placeholder="Place some text here"
-                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" name="description" class="form-control" id="description" placeholder="Enter short description for post" required>
+                    </div>
 
                     <div class="form-group">
-                        <label for="username">Tags</label>
+                        <label for="content">Content</label>
+                        <textarea id="content" name="content" class="summernote" placeholder="Place some text here"
+                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Follow Up Link</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="followUpLink" class="form-control" placeholder="Follow up link">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="followUpText" class="form-control" placeholder="Follow up text">
+                        </div>
+                        <div class="col-12">
+                            <small class="form-text text-muted">You can add a button below your post to direct readers to some other link. Set text and link of that button here.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">tags</label>
                         <input type="text" name="tags" class="form-control" id="tags" placeholder="Enter Tags" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coverImage">Cover Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" name="coverImage" class="custom-file-input" id="coverImage" accept="image/*" onchange='$("#coverImageHelp").html($(this).val()); $("#coverImageClean").show()'>
+                                <label class="custom-file-label" for="coverImage">Choose file</label>
+                            </div>
+                        </div>
+                        <button id="coverImageClean" type="button" class="btn btn-light" onclick="$('#coverImage').val(null); $('#coverImageHelp').html(''); $(this).hide()">Clean</button>
+                        <small class='form-text text-cyan' id="coverImageHelp"></small>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="removeCover" id="removeCover">
+                        <label class="form-check-label" for="removeCover">Delete Cover</label>
+                        <small id="removeCoverHelp" class="form-text text-muted">Only use to remove cover when you havent selected a new cover image, Otherwise your new cover won't be saved. By default new cover overrides old one.</small>
                     </div>
 
                 </div>
@@ -46,6 +87,11 @@
     </div>
 </section>
 <th:block layout:fragment="scripts">
+<script>
+    $(function () {
+        $("#coverImageClean").hide();
+    });
+</script>
 <script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
 <script>
     $('.summernote').summernote({

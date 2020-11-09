@@ -1,6 +1,5 @@
 package lab.idioglossia.gitblog.model;
 
-import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lombok.*;
 
 @Builder
@@ -10,5 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class PostPreview {
     private String title;
-    private UserEntity user;
+    private UserPreview user;
+    private String description;
+    private Integer id;
 }

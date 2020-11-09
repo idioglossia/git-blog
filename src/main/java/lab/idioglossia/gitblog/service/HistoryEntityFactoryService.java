@@ -2,6 +2,8 @@ package lab.idioglossia.gitblog.service;
 
 import lab.idioglossia.gitblog.model.LinksProperties;
 import lab.idioglossia.gitblog.model.entity.HistoryEntity;
+import lab.idioglossia.gitblog.model.entity.PostEntity;
+import lab.idioglossia.gitblog.model.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -110,12 +112,33 @@ public class HistoryEntityFactoryService {
                 .date(new Date())
                 .titleLink(HistoryEntity.TitleLink.builder()
                         .text(tag)
-                        .link("/panels/tags")
+                        .link("/panel/tags")
                         .build())
                 .titleAction("tag has been removed")
                 .icon(HistoryEntity.HistoryIcon.builder()
                         .color("bg-danger")
                         .iconClass("fa-tags")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
+
+    public HistoryEntity postAdded(UserEntity userEntity, PostEntity postEntity) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleAction(" created new post: " + postEntity.getTitle())
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .link("/panel/users/"+userEntity.getUsername())
+                        .text(userEntity.getUsername())
+                        .build())
+                .description(postEntity.getDescription())
+                .button(HistoryEntity.Button.builder()
+                        .text("See Post")
+                        .link("/panel/posts/" + postEntity.getId())
+                        .build())
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-info")
+                        .iconClass("fa-file-word")
                         .preClass("fas")
                         .build())
                 .build();

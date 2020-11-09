@@ -49,6 +49,8 @@ public class TagsService {
             tagRepository.save(TagEntity.builder()
                     .date(new Date())
                     .name(tag)
+                    .postIds(new ArrayList<>())
+                    .posts(new ArrayList<>())
                     .build());
 
             historyRepository.save(historyEntityFactoryService.tagAdded(tag));
@@ -69,5 +71,15 @@ public class TagsService {
 
     public List<String> getKeys() {
         return tagRepository.keys();
+    }
+
+    public synchronized void editTag(String tag, TagEditor tagEditor){
+        TagEntity tagEntity = tagRepository.get(tag);
+        tagEditor.edit(tagEntity);
+        tagRepository.update(tagEntity);
+    }
+
+    public interface TagEditor {
+        void edit(TagEntity tagEntity);
     }
 }

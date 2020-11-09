@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public UserEntity getCurrentUser(){
-        return userRepository.get(getUsername());
+        return userRepository.get(getCurrentUsername());
     }
 
     public UserEntity getUser(String username){
@@ -115,7 +115,7 @@ public class UserService {
         keysCache.addAll(userRepository.keys());
     }
 
-    private String getUsername(){
+    public String getCurrentUsername(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof UserDetails){
             return ((UserDetails) principal).getUsername();
@@ -123,7 +123,7 @@ public class UserService {
         return principal.toString();
     }
 
-    private synchronized UserEntity editUser(String username, UserEditor userEditor){
+    public synchronized UserEntity editUser(String username, UserEditor userEditor){
         UserEntity userEntity = userRepository.get(username);
         userEditor.editUser(userEntity);
         userRepository.update(userEntity);

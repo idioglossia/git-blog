@@ -29,7 +29,7 @@ public class UserEntity {
     private String bio;
     private String website;
     private Date creationDate;
-    private List<String> authorities;
+    private List<String> authorities = new ArrayList<>();
     private List<Integer> postIds = new ArrayList<>();
 
     @Override
