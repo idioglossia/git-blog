@@ -66,4 +66,8 @@ public class TagsService {
         }
         return false;
     }
+
+    public List<String> getKeys() {
+        return tagRepository.keys();
+    }
 }

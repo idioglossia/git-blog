@@ -1,0 +1,12 @@
+span.tagMatches {
+    margin-left: 10px;
+}
+
+span.tagMatches span {
+    padding: 5px;
+    margin-right: 4px;
+    background-color: #a8abaa;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+}

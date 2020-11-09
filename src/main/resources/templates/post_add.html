@@ -6,6 +6,7 @@
     <title>Git Blog - Add user</title>
     <th:block layout:fragment="stylesheets">
         <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+        <link rel="stylesheet" th:href="@{/css/tag.css}">
     </th:block>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -27,6 +28,12 @@
 
                     <textarea class="summernote" placeholder="Place some text here"
                               style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+
+                    <div class="form-group">
+                        <label for="username">Tags</label>
+                        <input type="text" name="tags" class="form-control" id="tags" placeholder="Enter Tags" required>
+                    </div>
+
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -40,21 +47,37 @@
 </section>
 <th:block layout:fragment="scripts">
 <script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
-    <script>
-        $('.summernote').summernote({
-            placeholder: 'Your post content here',
-            tabsize: 2,
-            height: 500,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
+<script>
+    $('.summernote').summernote({
+        placeholder: 'Your post content here',
+        tabsize: 2,
+        height: 500,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+</script>
+<script th:src="@{/js/tag.js}"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url: '/api/tags/names',
+            type: 'GET',
+            success: function (result) {
+                console.log(result);
+                $('#tags').tagSuggest({
+                    tags: result,
+                    separator: ', '
+                });
+            },
         });
-    </script>
+    });
+</script>
 </th:block>
 </body>
 </html>

@@ -5,10 +5,9 @@ import lab.idioglossia.gitblog.service.panel.TagsService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -32,6 +31,11 @@ public class ApiController {
     @DeleteMapping("/tags/{tag}")
     public ApiCallResult deleteTag(@PathVariable String tag){
         return new ApiCallResult(tagsService.delete(tag));
+    }
+
+    @GetMapping("/tags/names")
+    public List<String> getTagNames(){
+        return tagsService.getKeys();
     }
 
 }
