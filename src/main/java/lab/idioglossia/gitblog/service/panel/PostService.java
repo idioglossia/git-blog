@@ -4,12 +4,14 @@ import lab.idioglossia.gitblog.model.PostPreview;
 import lab.idioglossia.gitblog.model.UserPreview;
 import lab.idioglossia.gitblog.model.dto.PostDto;
 import lab.idioglossia.gitblog.model.entity.PostEntity;
+import lab.idioglossia.gitblog.model.entity.TagEntity;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.repository.FileRepository;
 import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.PostRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
+import lab.idioglossia.gitblog.util.UserAuthHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -69,6 +71,40 @@ public class PostService {
         }
 
         return postEntities;
+    }
+
+    public boolean deletePost(int id){
+        PostEntity postEntity = postRepository.get(id);
+        if(postEntity == null)
+            return false;
+
+        if(!UserAuthHelper.isCurrentUserAdmin() && !postEntity.getUsername().equals(userService.getCurrentUsername()))
+            return false;
+
+        fileRepository.removeFile("images", postEntity.getCover());
+        userService.editUser(postEntity.getUsername(), new UserService.UserEditor() {
+            @Override
+            public void editUser(UserEntity userEntity) {
+                userEntity.getPostIds().remove(id);
+            }
+        });
+        postEntity.getTags().forEach(tag -> {
+            tagsService.editTag(tag, new TagsService.TagEditor() {
+                @Override
+                public void edit(TagEntity tagEntity) {
+                    tagEntity.getPostIds().remove(id);
+                    for (PostPreview postPreview : tagEntity.getPosts()) {
+                        if(postPreview.getId() == id){
+                            tagEntity.getPosts().remove(postPreview);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+        postRepository.delete(postEntity);
+
+        return true;
     }
 
     public PostEntity addPost(PostDto postDto){

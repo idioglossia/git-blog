@@ -1,6 +1,7 @@
 package lab.idioglossia.gitblog.controller;
 
 import lab.idioglossia.gitblog.model.dto.ApiCallResult;
+import lab.idioglossia.gitblog.service.panel.PostService;
 import lab.idioglossia.gitblog.service.panel.TagsService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import java.util.List;
 public class ApiController {
     private final UserService userService;
     private final TagsService tagsService;
+    private final PostService postService;
 
     @Autowired
-    public ApiController(UserService userService, TagsService tagsService) {
+    public ApiController(UserService userService, TagsService tagsService, PostService postService) {
         this.userService = userService;
         this.tagsService = tagsService;
+        this.postService = postService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -31,6 +34,11 @@ public class ApiController {
     @DeleteMapping("/tags/{tag}")
     public ApiCallResult deleteTag(@PathVariable String tag){
         return new ApiCallResult(tagsService.delete(tag));
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public ApiCallResult deletePost(@PathVariable Integer postId){
+        return new ApiCallResult(postService.deletePost(postId));
     }
 
     @GetMapping("/tags/names")
