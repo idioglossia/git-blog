@@ -3,6 +3,7 @@ package lab.idioglossia.gitblog.controller;
 import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.service.panel.PanelHomeService;
+import lab.idioglossia.gitblog.service.panel.TagsService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -20,11 +22,13 @@ import java.util.Map;
 public class PanelController extends AbstractPanelController {
     private final PanelHomeService panelHomeService;
     private final UserService userService;
+    private final TagsService tagsService;
 
-    public PanelController(PanelHomeService panelHomeService, UserService userService) {
+    public PanelController(PanelHomeService panelHomeService, UserService userService, TagsService tagsService) {
         super(userService);
         this.panelHomeService = panelHomeService;
         this.userService = userService;
+        this.tagsService = tagsService;
     }
 
     @GetMapping("/panel")
@@ -83,5 +87,18 @@ public class PanelController extends AbstractPanelController {
         }else {
             return getAddNewUser(true);
         }
+    }
+
+    @GetMapping("/panel/tags")
+    public ModelAndView tagsListPage(){
+        Map<String, Object> model = getBaseModel("Tags");
+        model.put("tags", tagsService.getAllTags());
+        return new ModelAndView("tags", model);
+    }
+
+    @PostMapping("/panel/tags")
+    public ModelAndView addTag(@RequestParam String tag){
+        tagsService.create(tag);
+        return tagsListPage();
     }
 }

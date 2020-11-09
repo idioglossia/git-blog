@@ -88,4 +88,36 @@ public class HistoryEntityFactoryService {
                         .build())
                 .build();
     }
+
+    public HistoryEntity tagAdded(String tag){
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .text(tag)
+                        .link("/panels/tags")
+                        .build())
+                .titleAction("tag has been added")
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-green")
+                        .iconClass("fa-tags")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
+
+    public HistoryEntity tagRemoved(String tag) {
+        return HistoryEntity.builder()
+                .date(new Date())
+                .titleLink(HistoryEntity.TitleLink.builder()
+                        .text(tag)
+                        .link("/panels/tags")
+                        .build())
+                .titleAction("tag has been removed")
+                .icon(HistoryEntity.HistoryIcon.builder()
+                        .color("bg-danger")
+                        .iconClass("fa-tags")
+                        .preClass("fas")
+                        .build())
+                .build();
+    }
 }
