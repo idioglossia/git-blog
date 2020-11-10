@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,15 +35,17 @@ public class UserService {
     private final GitService gitService;
     private final HistoryRepository historyRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
+    private final SessionRegistry sessionRegistry;
     private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService) {
+    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, SessionRegistry sessionRegistry) {
         this.userRepository = userRepository;
         this.fileRepository = fileRepository;
         this.passwordEncoder = passwordEncoder;
         this.gitService = gitService;
         this.historyRepository = historyRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
+        this.sessionRegistry = sessionRegistry;
     }
 
     public UserEntity getCurrentUser(){
@@ -155,9 +160,12 @@ public class UserService {
     }
 
     public synchronized boolean deleteUser(String username) {
+        if(getCurrentUsername().equals(username))
+            return false;
         UserEntity user = getUser(username);
         if(user != null){
             userRepository.delete(user);
+            deleteUserSessions(username);
             setKeyCache();
             historyRepository.save(historyEntityFactoryService.userProfileRemoved(username));
             gitService.addAndCommit("Removed user " + username);
@@ -168,6 +176,19 @@ public class UserService {
 
     public interface UserEditor {
         void editUser(UserEntity userEntity);
+    }
+
+    private void deleteUserSessions(String username){
+        for (Object principal : sessionRegistry.getAllPrincipals()) {
+            if (principal instanceof User) {
+                UserDetails userDetails = (UserDetails) principal;
+                if (userDetails.getUsername().equals(username)) {
+                    for (SessionInformation information : sessionRegistry.getAllSessions(userDetails, true)) {
+                        information.expireNow();
+                    }
+                }
+            }
+        }
     }
 
 }
