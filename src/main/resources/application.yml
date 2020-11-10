@@ -4,7 +4,7 @@ gitblog:
     features: "https://github.com/idioglossia/git-blog"
   config:
     init: false
-    dbPath: ".db/"
+    dbPath: "db/"
     reads: 10
     writes: 5
 logging:
