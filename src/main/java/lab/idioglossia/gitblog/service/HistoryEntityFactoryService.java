@@ -137,7 +137,7 @@ public class HistoryEntityFactoryService {
                         .link("/panel/posts/" + postEntity.getId())
                         .build())
                 .icon(HistoryEntity.HistoryIcon.builder()
-                        .color("bg-info")
+                        .color("bg-green")
                         .iconClass("fa-file-word")
                         .preClass("fas")
                         .build())
