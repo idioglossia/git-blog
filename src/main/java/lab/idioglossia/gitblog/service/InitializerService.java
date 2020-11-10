@@ -6,7 +6,9 @@ import lab.idioglossia.gitblog.model.ApplicationProperties;
 import lab.idioglossia.gitblog.model.ConfigModel;
 import lab.idioglossia.gitblog.model.Role;
 import lab.idioglossia.gitblog.model.dto.InitializeDto;
+import lab.idioglossia.gitblog.model.entity.IndexEntity;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
+import lab.idioglossia.gitblog.repository.sloth.SlothIndexRepository;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lab.idioglossia.jsonsloth.JsonSlothStorage;
 import lab.idioglossia.sloth.FileWriter;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +70,15 @@ public class InitializerService {
         }
         JsonSlothManager jsonSlothManager = getJsonSlothManager(dbPath);
         setupAdmin(jsonSlothManager, adminPassword);
+        setUpIndexes(jsonSlothManager);
         return dbPath;
+    }
+
+    private void setUpIndexes(JsonSlothManager jsonSlothManager) {
+        SlothIndexRepository slothIndexRepository = new SlothIndexRepository(jsonSlothManager);
+        slothIndexRepository.save(IndexEntity.builder()
+                .usernames(Collections.singletonList("admin"))
+                .build());
     }
 
     private JsonSlothManager getJsonSlothManager(String dbPath) throws IOException {

@@ -73,6 +73,12 @@ public class ApplicationConfiguration {
         return new SlothUserRepository(jsonSlothManager);
     }
 
+    @DependsOn("jsonSlothManager")
+    @Bean
+    public IndexRepository indexRepository(JsonSlothManager jsonSlothManager){
+        return new SlothIndexRepository(jsonSlothManager);
+    }
+
     @DependsOn("slothStorage")
     @Bean
     public FileRepository fileRepository(SlothStorage slothStorage){

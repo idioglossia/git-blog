@@ -10,6 +10,7 @@ import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.PostRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
+import lab.idioglossia.gitblog.service.IndexesService;
 import lab.idioglossia.gitblog.util.UserAuthHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,17 @@ public class PostService {
     private final HistoryEntityFactoryService historyEntityFactoryService;
     private final HistoryRepository historyRepository;
     private final FileRepository fileRepository;
+    private final IndexesService indexesService;
     private final GitService gitService;
 
-    public PostService(UserService userService, TagsService tagsService, PostRepository postRepository, HistoryEntityFactoryService historyEntityFactoryService, HistoryRepository historyRepository, FileRepository fileRepository, GitService gitService) {
+    public PostService(UserService userService, TagsService tagsService, PostRepository postRepository, HistoryEntityFactoryService historyEntityFactoryService, HistoryRepository historyRepository, FileRepository fileRepository, IndexesService indexesService, GitService gitService) {
         this.userService = userService;
         this.tagsService = tagsService;
         this.postRepository = postRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
         this.historyRepository = historyRepository;
         this.fileRepository = fileRepository;
+        this.indexesService = indexesService;
         this.gitService = gitService;
     }
 
@@ -108,6 +111,7 @@ public class PostService {
                 }
             });
         });
+        indexesService.removePost(postEntity.getId());
         postRepository.delete(postEntity);
         historyRepository.save(historyEntityFactoryService.postDeleted(userService.getCurrentUsername(), postEntity));
         gitService.addAndCommit("Removed a post from " + postEntity.getUsername());
@@ -130,7 +134,7 @@ public class PostService {
         handleCover(postDto, postEntity);
         postRepository.save(postEntity);
 
-
+        indexesService.addPost(postEntity.getId());
         postEntity.getTags().forEach(tag -> {
             tagsService.editTag(tag, tagEntity -> {
                 tagEntity.getPostIds().add(postEntity.getId());

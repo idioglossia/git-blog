@@ -5,6 +5,7 @@ import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.TagRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
+import lab.idioglossia.gitblog.service.IndexesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,15 @@ public class TagsService {
     private final TagRepository tagRepository;
     private final HistoryRepository historyRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
+    private final IndexesService indexesService;
     private final GitService gitService;
 
     @Autowired
-    public TagsService(TagRepository tagRepository, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, GitService gitService) {
+    public TagsService(TagRepository tagRepository, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, IndexesService indexesService, GitService gitService) {
         this.tagRepository = tagRepository;
         this.historyRepository = historyRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
+        this.indexesService = indexesService;
         this.gitService = gitService;
     }
 
@@ -53,6 +56,7 @@ public class TagsService {
                     .posts(new ArrayList<>())
                     .build());
 
+            indexesService.addTag(tag);
             historyRepository.save(historyEntityFactoryService.tagAdded(tag));
             gitService.addAndCommit("Tag " + tag + " has been added");
         }
@@ -62,6 +66,7 @@ public class TagsService {
         TagEntity tagEntity = tagRepository.get(tag);
         if(tagEntity != null){
             tagRepository.delete(tagEntity);
+            indexesService.removeTag(tag);
             historyRepository.save(historyEntityFactoryService.tagRemoved(tag));
             gitService.addAndCommit("Tag " + tag + " has been removed");
             return true;

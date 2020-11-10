@@ -10,6 +10,7 @@ import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.UserRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
+import lab.idioglossia.gitblog.service.IndexesService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Profile;
@@ -34,16 +35,18 @@ public class UserService {
     private final FileRepository fileRepository;
     private final PasswordEncoder passwordEncoder;
     private final GitService gitService;
+    private final IndexesService indexesService;
     private final HistoryRepository historyRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
     private final Map<String, Session> sessionMap;
     private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, Map<String, Session> sessionMap) {
+    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, IndexesService indexesService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, Map<String, Session> sessionMap) {
         this.userRepository = userRepository;
         this.fileRepository = fileRepository;
         this.passwordEncoder = passwordEncoder;
         this.gitService = gitService;
+        this.indexesService = indexesService;
         this.historyRepository = historyRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
         this.sessionMap = sessionMap;
@@ -153,6 +156,7 @@ public class UserService {
                     .website(userAddDto.getWebsite())
                     .build());
             setKeyCache();
+            indexesService.addUsername(userAddDto.getUsername());
             historyRepository.save(historyEntityFactoryService.userProfileAdded(userAddDto.getUsername()));
             gitService.addAndCommit("Added new user " + userAddDto.getUsername());
             return true;
@@ -166,6 +170,7 @@ public class UserService {
         UserEntity user = getUser(username);
         if(user != null){
             userRepository.delete(user);
+            indexesService.removeUsername(username);
             deleteUserSessions(username);
             setKeyCache();
             historyRepository.save(historyEntityFactoryService.userProfileRemoved(username));
