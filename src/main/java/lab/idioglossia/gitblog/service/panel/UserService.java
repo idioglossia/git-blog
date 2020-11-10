@@ -1,5 +1,6 @@
 package lab.idioglossia.gitblog.service.panel;
 
+import lab.idioglossia.gitblog.config.security.UserSessionDetails;
 import lab.idioglossia.gitblog.model.Role;
 import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
@@ -12,12 +13,12 @@ import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.session.SessionInformation;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -35,17 +36,17 @@ public class UserService {
     private final GitService gitService;
     private final HistoryRepository historyRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
-    private final SessionRegistry sessionRegistry;
+    private final Map<String, Session> sessionMap;
     private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, SessionRegistry sessionRegistry) {
+    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, Map<String, Session> sessionMap) {
         this.userRepository = userRepository;
         this.fileRepository = fileRepository;
         this.passwordEncoder = passwordEncoder;
         this.gitService = gitService;
         this.historyRepository = historyRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
-        this.sessionRegistry = sessionRegistry;
+        this.sessionMap = sessionMap;
     }
 
     public UserEntity getCurrentUser(){
@@ -179,14 +180,14 @@ public class UserService {
     }
 
     private void deleteUserSessions(String username){
-        for (Object principal : sessionRegistry.getAllPrincipals()) {
-            if (principal instanceof User) {
-                UserDetails userDetails = (UserDetails) principal;
-                if (userDetails.getUsername().equals(username)) {
-                    for (SessionInformation information : sessionRegistry.getAllSessions(userDetails, true)) {
-                        information.expireNow();
-                    }
-                }
+        for (Session session : sessionMap.values()) {
+            SecurityContext securityContext = session.getAttribute("SPRING_SECURITY_CONTEXT");
+            if(securityContext == null)
+                continue;
+            Authentication authentication = securityContext.getAuthentication();
+            Object principal = authentication.getPrincipal();
+            if(principal instanceof UserSessionDetails && ((UserSessionDetails) principal).getUsername().equals(username)){
+                sessionMap.remove(session.getId());
             }
         }
     }

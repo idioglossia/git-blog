@@ -45,6 +45,9 @@ public class PostService {
         int from = page * pageSize;
         int to = (page + 1) * pageSize;
 
+        if(userEntity.getPostIds() == null)
+            return new ArrayList<>();
+
         List<Integer> keys = userEntity.getPostIds();
         Collections.reverse(keys);
 

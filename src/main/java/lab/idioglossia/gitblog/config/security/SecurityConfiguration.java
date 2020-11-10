@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,14 +14,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.session.MapSessionRepository;
+import org.springframework.session.Session;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
@@ -72,14 +73,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .invalidateHttpSession(true);
     }
 
-    @Bean
-    public SessionRegistry sessionRegistry(){
-        return new SessionRegistryImpl();
+
+    @Bean("sessionMap")
+    public Map<String, Session> sessionMap(){
+        return new ConcurrentHashMap<>();
     }
 
     @Bean
-    public MapSessionRepository sessionRepository() {
-        return new MapSessionRepository(new ConcurrentHashMap<>());
+    @DependsOn("sessionMap")
+    public MapSessionRepository sessionRepository(Map<String, Session> sessionMap) {
+        return new MapSessionRepository(sessionMap);
     }
 
     @Bean("authenticationManager")
