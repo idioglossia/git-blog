@@ -15,6 +15,7 @@ import lab.idioglossia.sloth.FileWriter;
 import lab.idioglossia.sloth.SlothStorage;
 import lombok.SneakyThrows;
 import net.lingala.zip4j.ZipFile;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
@@ -24,8 +25,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -103,9 +103,15 @@ public class InitializerService {
     }
 
     private void moveGitBlogInterface(String address) throws IOException {
-        File gitBlogZip = new ClassPathResource(GIT_BLOG_ZIP_RESOURCE).getFile();
-        ZipFile zipFile = new ZipFile(gitBlogZip);
+        InputStream inputStream = new ClassPathResource(GIT_BLOG_ZIP_RESOURCE).getInputStream();
+        File file = new File(address + "gitblog.zip");
+        try(OutputStream outputStream = new FileOutputStream(file)){
+            IOUtils.copy(inputStream, outputStream);
+        }
+
+        ZipFile zipFile = new ZipFile(file);
         zipFile.extractAll(address);
+        file.delete();
 //        unzip(gitBlogZip, address.endsWith("/") ? address : address.substring(0, address.length() - 1));
     }
 

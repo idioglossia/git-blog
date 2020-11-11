@@ -6,6 +6,7 @@ import lab.idioglossia.gitblog.model.entity.UserEntity;
 import lab.idioglossia.gitblog.service.panel.PostService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Profile("initialized")
 public class PostController extends AbstractPanelController{
     private final PostService postService;
     private final UserService userService;

@@ -5,12 +5,14 @@ import lab.idioglossia.gitblog.service.panel.PostService;
 import lab.idioglossia.gitblog.service.panel.TagsService;
 import lab.idioglossia.gitblog.service.panel.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@Profile("initialized")
 @RequestMapping("/api")
 public class ApiController {
     private final UserService userService;

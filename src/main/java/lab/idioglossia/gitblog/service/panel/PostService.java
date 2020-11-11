@@ -12,12 +12,14 @@ import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lab.idioglossia.gitblog.service.IndexesService;
 import lab.idioglossia.gitblog.util.UserAuthHelper;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
 
 @Service
+@Profile("initialized")
 public class PostService {
     private final UserService userService;
     private final TagsService tagsService;
@@ -247,8 +249,8 @@ public class PostService {
             while (splitTag.startsWith(" ")){
                 splitTag = splitTag.substring(1);
             }
-            if(keys.contains(splitTag)){
-                tags.add(splitTag);
+            if(keys.contains(splitTag.toLowerCase())){
+                tags.add(splitTag.toLowerCase());
             }
         }
         return tags;

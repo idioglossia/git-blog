@@ -7,6 +7,7 @@ import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lab.idioglossia.gitblog.service.IndexesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Profile("initialized")
 public class TagsService {
     private final TagRepository tagRepository;
     private final HistoryRepository historyRepository;
@@ -47,11 +49,11 @@ public class TagsService {
     }
 
     public synchronized void create(String tag) {
-        TagEntity tagEntity = tagRepository.get(tag);
+        TagEntity tagEntity = tagRepository.get(tag.toLowerCase());
         if(tagEntity == null){
             tagRepository.save(TagEntity.builder()
                     .date(new Date())
-                    .name(tag)
+                    .name(tag.toLowerCase())
                     .postIds(new ArrayList<>())
                     .build());
 
@@ -62,10 +64,10 @@ public class TagsService {
     }
 
     public synchronized boolean delete(String tag){
-        TagEntity tagEntity = tagRepository.get(tag);
+        TagEntity tagEntity = tagRepository.get(tag.toLowerCase());
         if(tagEntity != null){
             tagRepository.delete(tagEntity);
-            indexesService.removeTag(tag);
+            indexesService.removeTag(tag.toLowerCase());
             historyRepository.save(historyEntityFactoryService.tagRemoved(tag));
             gitService.addAndCommit("Tag " + tag + " has been removed");
             return true;
@@ -78,7 +80,7 @@ public class TagsService {
     }
 
     public synchronized void editTag(String tag, TagEditor tagEditor){
-        TagEntity tagEntity = tagRepository.get(tag);
+        TagEntity tagEntity = tagRepository.get(tag.toLowerCase());
         tagEditor.edit(tagEntity);
         tagRepository.update(tagEntity);
     }
