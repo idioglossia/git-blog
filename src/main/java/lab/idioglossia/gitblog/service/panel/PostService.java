@@ -1,6 +1,5 @@
 package lab.idioglossia.gitblog.service.panel;
 
-import lab.idioglossia.gitblog.model.PostPreview;
 import lab.idioglossia.gitblog.model.dto.PostDto;
 import lab.idioglossia.gitblog.model.entity.PostEntity;
 import lab.idioglossia.gitblog.model.entity.TagEntity;
@@ -102,12 +101,6 @@ public class PostService {
                 @Override
                 public void edit(TagEntity tagEntity) {
                     tagEntity.getPostIds().remove(id);
-                    for (PostPreview postPreview : tagEntity.getPosts()) {
-                        if(postPreview.getId() == id){
-                            tagEntity.getPosts().remove(postPreview);
-                            break;
-                        }
-                    }
                 }
             });
         });
@@ -138,7 +131,6 @@ public class PostService {
         postEntity.getTags().forEach(tag -> {
             tagsService.editTag(tag, tagEntity -> {
                 tagEntity.getPostIds().add(postEntity.getId());
-                tagEntity.getPosts().add(PostPreview.from(postEntity, userEntity));
             });
         });
         userService.editUser(userEntity.getUsername(), userEntity1 -> {
@@ -175,12 +167,6 @@ public class PostService {
                 @Override
                 public void edit(TagEntity tagEntity) {
                     tagEntity.getPostIds().remove(id);
-                    for (PostPreview postPreview : tagEntity.getPosts()) {
-                        if(postPreview.getId().equals(id)){
-                            tagEntity.getPosts().remove(postPreview);
-                            break;
-                        }
-                    }
                 }
             });
         });
@@ -190,7 +176,6 @@ public class PostService {
         newTags.forEach(tag -> {
             tagsService.editTag(tag, tagEntity -> {
                 tagEntity.getPostIds().add(postEntity.getId());
-                tagEntity.getPosts().add(PostPreview.from(postEntity, userEntity));
             });
         });
         postEntity.setTags(tags);

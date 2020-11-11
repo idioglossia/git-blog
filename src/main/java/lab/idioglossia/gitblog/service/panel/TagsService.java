@@ -53,7 +53,6 @@ public class TagsService {
                     .date(new Date())
                     .name(tag)
                     .postIds(new ArrayList<>())
-                    .posts(new ArrayList<>())
                     .build());
 
             indexesService.addTag(tag);

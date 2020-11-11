@@ -1,6 +1,5 @@
 package lab.idioglossia.gitblog.model.entity;
 
-import lab.idioglossia.gitblog.model.PostPreview;
 import lab.idioglossia.jsonsloth.JsonSlothEntity;
 import lab.idioglossia.jsonsloth.JsonSlothId;
 import lab.idioglossia.sloth.Collection;
@@ -20,5 +19,4 @@ public class TagEntity {
     private String name;
     private Date date;
     private List<Integer> postIds;
-    private List<PostPreview> posts;
 }
