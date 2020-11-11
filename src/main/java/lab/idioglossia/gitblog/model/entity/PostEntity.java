@@ -26,6 +26,7 @@ public class PostEntity {
     private String username;
     private List<String> tags;
     private String cover;
+    private String thumbnail;
 
     public String getDescriptionSub(int max){
         if(description == null)

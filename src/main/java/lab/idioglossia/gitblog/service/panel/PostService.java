@@ -125,6 +125,7 @@ public class PostService {
                 .build();
 
         handleCover(postDto, postEntity);
+        handleThumbnail(postDto, postEntity);
         postRepository.save(postEntity);
 
         indexesService.addPost(postEntity.getId());
@@ -154,6 +155,7 @@ public class PostService {
         UserEntity userEntity = userService.getUser(postEntity.getUsername());
 
         handleCover(postDto, postEntity);
+        handleThumbnail(postDto, postEntity);
         postEntity.setContent(postDto.getContent());
         postEntity.setDescription(postDto.getDescription());
         postEntity.setTitle(postDto.getTitle());
@@ -202,13 +204,37 @@ public class PostService {
                 fileRepository.removeFile("images", postEntity.getCover());
             }
 
-            String profilePicName = UUID.randomUUID().toString();
+            String imageName = UUID.randomUUID().toString();
             String extension = FilenameUtils.getExtension(postDto.getCoverImage().getOriginalFilename());
-            String fullPP = profilePicName + "." + extension;
+            String fullPP = imageName + "." + extension;
             fileRepository.addFile("images", fullPP, postDto.getCoverImage());
             postEntity.setCover(fullPP);
         }
     }
+
+    private void handleThumbnail(PostDto postDto, PostEntity postEntity) {
+        if(postDto.isRemoveThumbnail()){
+            if (postEntity.getThumbnail() != null) {
+                fileRepository.removeFile("images", postEntity.getThumbnail());
+            }
+            postEntity.setThumbnail(null);
+            return;
+        }
+
+        if (postDto.getThumbnailImage() != null && !StringUtils.isEmpty(postDto.getThumbnailImage().getOriginalFilename())) {
+
+            if (postEntity.getThumbnail() != null) {
+                fileRepository.removeFile("images", postEntity.getThumbnail());
+            }
+
+            String imageName = UUID.randomUUID().toString();
+            String extension = FilenameUtils.getExtension(postDto.getThumbnailImage().getOriginalFilename());
+            String fullPP = imageName + "." + extension;
+            fileRepository.addFile("images", fullPP, postDto.getThumbnailImage());
+            postEntity.setThumbnail(fullPP);
+        }
+    }
+
 
     private List<String> getTags(PostDto postDto) {
         if(StringUtils.isEmpty(postDto.getTags()))

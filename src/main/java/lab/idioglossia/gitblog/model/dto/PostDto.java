@@ -27,5 +27,7 @@ public class PostDto {
     private String followUpText;
     private String tags;
     private boolean removeCover;
+    private boolean removeThumbnail;
     private MultipartFile coverImage;
+    private MultipartFile thumbnailImage;
 }
