@@ -83,6 +83,7 @@ public class TagsService {
         TagEntity tagEntity = tagRepository.get(tag.toLowerCase());
         tagEditor.edit(tagEntity);
         tagRepository.update(tagEntity);
+        gitService.addAndCommit("Tag " + tag + " has been updates");
     }
 
     public interface TagEditor {
