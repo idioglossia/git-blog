@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -22,4 +23,9 @@ public class InitializeDto {
     @NotNull
     @NotEmpty
     private String password;
+    private String username;
+
+    public String getUsername() {
+        return StringUtils.isEmpty(username) ? "admin" : username;
+    }
 }

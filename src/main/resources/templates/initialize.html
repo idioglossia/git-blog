@@ -28,6 +28,12 @@
         </div>
 
         <div class="form-group">
+            <label for="username">Admin Username</label>
+            <input type="username" name="username" class="form-control" aria-describedby="usernameHelp" id="username" placeholder="Admin Account Username" value="admin" required>
+            <small id="usernameHelp" class="form-text text-muted">Choose a username for an admin account that will be made through initializing process.</small>
+        </div>
+
+        <div class="form-group">
             <label for="password">Admin Password</label>
             <input type="password" name="password" class="form-control" aria-describedby="passwordHelp" id="password" placeholder="Admin Account Password" required>
             <small id="passwordHelp" class="form-text text-muted">This password is used for administrator account. This account will automatically be created when application initializes.</small>

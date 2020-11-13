@@ -53,7 +53,7 @@ public class InitializerService {
     @SneakyThrows
     public void initialize(InitializeDto initializeDto){
         Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
-        String dbPath = initDB(initializeDto.getAddress(), initializeDto.getPassword());
+        String dbPath = initDB(initializeDto.getAddress(), initializeDto.getUsername(), initializeDto.getPassword());
         writeConfig(initializeDto, dbPath);
         moveGitBlogInterface(initializeDto.getAddress());
         addAndCommit(git);
@@ -61,7 +61,7 @@ public class InitializerService {
         GitBlogApplication.restart();
     }
 
-    public String initDB(String basePath, String adminPassword) throws IOException {
+    public String initDB(String basePath, String adminUsername, String adminPassword) throws IOException {
         String dbPath = basePath;
         if(basePath.endsWith("/")){
             dbPath += applicationProperties.getDbPath();
@@ -69,15 +69,15 @@ public class InitializerService {
             dbPath += "/" + applicationProperties.getDbPath();
         }
         JsonSlothManager jsonSlothManager = getJsonSlothManager(dbPath);
-        setupAdmin(jsonSlothManager, adminPassword);
-        setUpIndexes(jsonSlothManager);
+        setupAdmin(jsonSlothManager, adminUsername, adminPassword);
+        setUpIndexes(jsonSlothManager, adminUsername);
         return dbPath;
     }
 
-    private void setUpIndexes(JsonSlothManager jsonSlothManager) {
+    private void setUpIndexes(JsonSlothManager jsonSlothManager, String adminUsername) {
         SlothIndexRepository slothIndexRepository = new SlothIndexRepository(jsonSlothManager);
         slothIndexRepository.save(IndexEntity.builder()
-                .usernames(Collections.singletonList("admin"))
+                .usernames(Collections.singletonList(adminUsername))
                 .build());
     }
 
@@ -131,14 +131,14 @@ public class InitializerService {
         git.commit().setMessage("Git Blog Initialized").setNoVerify(true).call();
     }
 
-    private void setupAdmin(JsonSlothManager jsonSlothManager, String password){
+    private void setupAdmin(JsonSlothManager jsonSlothManager, String adminUsername, String password){
         List<String> roles = new ArrayList<>();
         roles.add(Role.ADMIN);
         roles.add(Role.USER);
         jsonSlothManager.save(UserEntity.builder()
                 .authorities(roles)
                 .password(passwordEncoder.encode(password))
-                .username("admin")
+                .username(adminUsername)
                 .creationDate(new Date())
                 .build());
 
