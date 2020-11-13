@@ -7,3 +7,5 @@ This data will be easily accessible through javascript and web browser. Therefor
 
 Git Blog is not built to support large scale blog with lots of users and posts, so You should go easy on it!
 But it does support simple post managements and content organization.
+
+An example of generated blog is available [here](https://idioglossia.github.io/git-blog-test/). Don't forget that the data there is just for example purpose and can be edited. 
