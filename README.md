@@ -29,3 +29,18 @@ This section contains restrictions (or known problems) of Git Blog that is only 
 There are more restrictions to include in this list but you can see the list of full bugs, issues, and features I will be working on [here](https://github.com/idioglossia/git-blog/projects/1). The plan is to reduce these restrictions in next versions. 
 
 There are other minor issues too, for example panel could be much better and usable through phone, code should get cleaner, and generated website could have more details and be more configurable. These will be done as well.
+
+## How to run
+
+Running gitblog require Java version 8 or 8+. You can see all [released versions](https://github.com/idioglossia/git-blog/releases) and choose the version you want (probably always latest version). Under **assets** of each version, there will be a `gitblog.jar` file which you will need to run gitblog.
+
+- Move jar file to a directory of your wish
+- Open command line in that directory
+- Run `java -jar gitblog.jar`
+- Gitblog is now accessible through port 8083, so navigate your browser to `http://localhost:8083`
+
+If you are doing this on a server, you surely need to either open port 8083 on your server or use a reverese proxy like Nginx.
+
+After initialization, a `config.json` will be created in same directory as jar file, with logs. 
+
+If you want to run gitblog as a linux service, you can check [this repository](https://github.com/sepehr-gh/springboot-linux-service-builder) which I explained how to run a `spring-boot jar` as service on linux.
