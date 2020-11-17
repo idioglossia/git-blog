@@ -1,4 +1,10 @@
-# Git Blog
+```
+  _____   _   __    ___    __            
+ / ___/  (_) / /_  / _ )  / / ___   ___ _
+/ (_ /  / / / __/ / _  | / / / _ \ / _ `/
+\___/  /_/  \__/ /____/ /_/  \___/ \_, / 
+                                  /___/  
+```
 
 Git Blog generates a simple blog website hosted by `github pages` and lets you and your team manage this website. All have to do is run a Gitblog panel and add your team members to it. After that, you can start writing your blog posts.
 
