@@ -139,6 +139,7 @@ public class InitializerService {
     private void setupAdmin(JsonSlothManager jsonSlothManager, String adminUsername, String password){
         List<String> roles = new ArrayList<>();
         roles.add(Role.ADMIN);
+        roles.add(Role.SUPER_ADMIN);
         roles.add(Role.USER);
         jsonSlothManager.save(UserEntity.builder()
                 .authorities(roles)

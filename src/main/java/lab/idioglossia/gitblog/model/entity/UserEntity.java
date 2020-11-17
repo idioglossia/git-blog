@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static lab.idioglossia.gitblog.model.Role.ADMIN;
+import static lab.idioglossia.gitblog.model.Role.SUPER_ADMIN;
 
 @JsonSlothEntity(collectionName = "users", type = Collection.Type.MAP)
 @Getter
@@ -54,6 +55,10 @@ public class UserEntity {
     @Override
     public int hashCode() {
         return Objects.hash(getUsername(), getName(), getPassword(), getProfilePicture(), getTitle(), getBio(), getWebsite(), getCreationDate(), getAuthorities(), getPostIds());
+    }
+
+    public boolean isSuperAdmin() {
+        return authorities.contains(SUPER_ADMIN);
     }
 
     public boolean isAdmin(){

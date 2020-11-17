@@ -160,8 +160,11 @@ public class UserService {
     public synchronized boolean deleteUser(String username) {
         if(getCurrentUsername().equals(username))
             return false;
+        UserEntity currentUser = getCurrentUser();
         UserEntity user = getUser(username);
         if(user != null){
+            if(user.isAdmin() && !currentUser.isSuperAdmin())
+                return false;
             userRepository.delete(user);
             indexesService.removeUsername(username);
             deleteUserSessions(username);
