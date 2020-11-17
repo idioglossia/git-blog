@@ -22,6 +22,9 @@ public class InitializeDto {
     private String reference;
     @NotNull
     @NotEmpty
+    private String githubPagesPath;
+    @NotNull
+    @NotEmpty
     private String password;
     private String username;
 

@@ -21,7 +21,7 @@ public class GitService {
 
     @SneakyThrows
     public synchronized void addAndCommit(String message){
-        git.add().addFilepattern(".").call();
+        git.add().addFilepattern((configModel.getGithubPagesPath().equals("/root") ? "" : configModel.getGithubPagesPath()) + ".").call();
         git.commit().setMessage(message).call();
     }
 

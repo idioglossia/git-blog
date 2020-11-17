@@ -53,7 +53,7 @@ public class InitializerService {
     @SneakyThrows
     public void initialize(InitializeDto initializeDto){
         Git git = initGit(initializeDto.getAddress(), initializeDto.getReference());
-        String dbPath = initDB(initializeDto.getAddress(), initializeDto.getUsername(), initializeDto.getPassword());
+        String dbPath = initDB(initializeDto.getAddress(), initializeDto.getGithubPagesPath(), initializeDto.getUsername(), initializeDto.getPassword());
         writeConfig(initializeDto, dbPath);
         moveGitBlogInterface(initializeDto.getAddress());
         addHisotry(dbPath);
@@ -61,12 +61,15 @@ public class InitializerService {
         GitBlogApplication.restart();
     }
 
-    public String initDB(String basePath, String adminUsername, String adminPassword) throws IOException {
+    public String initDB(String basePath, String githubPagesPath, String adminUsername, String adminPassword) throws IOException {
         String dbPath = basePath;
         if(basePath.endsWith("/")){
             dbPath += applicationProperties.getDbPath();
         }else {
             dbPath += "/" + applicationProperties.getDbPath();
+        }
+        if(!githubPagesPath.equals("/root")){
+            dbPath += githubPagesPath;
         }
         JsonSlothManager jsonSlothManager = getJsonSlothManager(dbPath);
         setupAdmin(jsonSlothManager, adminUsername, adminPassword);

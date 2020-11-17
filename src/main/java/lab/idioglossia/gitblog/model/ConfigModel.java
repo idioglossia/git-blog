@@ -19,6 +19,7 @@ public class ConfigModel extends InitializeDto {
     public void setInitializeDto(InitializeDto initializeDto){
         this.setAddress(initializeDto.getAddress());
         this.setReference(initializeDto.getReference());
+        this.setGithubPagesPath(initializeDto.getGithubPagesPath());
     }
 
     public void setPassword(String password){}
