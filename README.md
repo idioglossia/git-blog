@@ -21,20 +21,18 @@ An example of generated blog is available [here](https://idioglossia.github.io/g
 
 ## General Restrictions
 
-Git Blog is not built to support large scale blog with lots of users and posts, so You should go easy on it! But it does support simple post managements and content organization. "How fast it can be" pretty much depends on how fast the viewer internet is. Since there is a network call needed for each individual piece of data, optimizing git blog will need some experience time. At this stage, I can't give more information about this, but surely it will always be my priority to make it faster.
+Git Blog is not built to support large scale blog with lots of members and posts, so You should go easy on it! But it does support simple post managements and content organization. "How fast it can be" pretty much depends on how fast the viewer internet is, since there is a network call needed for each individual piece of data. Optimizing git blog will need some experience time. At this stage, I can't give more information about this, but surely it will always be my priority to make it faster.
 
 ## Version Restrictions
 
 This section contains restrictions (or known problems) of Git Blog that is only for current version (_v0.1-beta.1_).
 
-- New admins can remove all other admins including main one created through initialization.
-- User passwords are encoded but saved along their profile information in `db`. So encoded version will be accessible through github repository in. This is not the safest way to store user passwords.
+- User passwords are encoded but saved along their profile information in `db`. So encoded version will be accessible through github repository in. This is not the safest way to store user passwords, while cracking those passwords are almost impossible. This doesn't put your panel at risk since viewers don't know your panel address, but in rare cases might put individual member security at risk.
 - Editing usernames is not possible at this stage. Once an user is created with an unique username, it is impossible to change that username in panel.
 - Gitblog doesnt clone repositories for you. You can only pass cloned repository addresses from your machine.
-- Pull and Push commands might not work. Gitblog commits newly added/removed/edited files after any change in data, but you should push the result yourself.
-- **Gitblog doesnt work on Windows machines**. While It's not even tested on windows machine yet, there are linux commands for git service inside Gitblog that probably will break the tool on windows.
+- **Gitblog MAY NOT work on Windows machines**. The tool is not tested on windows machine yet. There might be some issues with addresses for files and db.
 
-There are more restrictions to include in this list but you can see the list of full bugs, issues, and features I will be working on [here](https://github.com/idioglossia/git-blog/projects/1). The plan is to reduce these restrictions in next versions. 
+There are more restrictions to include in this list but you can see the list of full bugs, issues, and features I will be working on [here](https://github.com/idioglossia/git-blog/projects/1). The plan is to reduce these restrictions in next versions.
 
 There are other minor issues too, for example panel could be much better and usable through phone, code should get cleaner, and generated website could have more details and be more configurable. These will be done as well.
 
