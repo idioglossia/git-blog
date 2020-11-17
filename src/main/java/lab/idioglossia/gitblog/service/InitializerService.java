@@ -56,8 +56,8 @@ public class InitializerService {
         String dbPath = initDB(initializeDto.getAddress(), initializeDto.getUsername(), initializeDto.getPassword());
         writeConfig(initializeDto, dbPath);
         moveGitBlogInterface(initializeDto.getAddress());
-        addAndCommit(git);
         addHisotry(dbPath);
+        addAndCommit(git);
         GitBlogApplication.restart();
     }
 
