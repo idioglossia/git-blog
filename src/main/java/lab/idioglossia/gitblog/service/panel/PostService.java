@@ -4,19 +4,20 @@ import lab.idioglossia.gitblog.model.dto.PostDto;
 import lab.idioglossia.gitblog.model.entity.PostEntity;
 import lab.idioglossia.gitblog.model.entity.TagEntity;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
-import lab.idioglossia.gitblog.repository.FileRepository;
 import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.PostRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lab.idioglossia.gitblog.service.IndexesService;
 import lab.idioglossia.gitblog.util.UserAuthHelper;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Profile("initialized")
@@ -26,18 +27,18 @@ public class PostService {
     private final PostRepository postRepository;
     private final HistoryEntityFactoryService historyEntityFactoryService;
     private final HistoryRepository historyRepository;
-    private final FileRepository fileRepository;
     private final IndexesService indexesService;
+    private final FileService fileService;
     private final GitService gitService;
 
-    public PostService(UserService userService, TagsService tagsService, PostRepository postRepository, HistoryEntityFactoryService historyEntityFactoryService, HistoryRepository historyRepository, FileRepository fileRepository, IndexesService indexesService, GitService gitService) {
+    public PostService(UserService userService, TagsService tagsService, PostRepository postRepository, HistoryEntityFactoryService historyEntityFactoryService, HistoryRepository historyRepository, IndexesService indexesService, FileService fileService, GitService gitService) {
         this.userService = userService;
         this.tagsService = tagsService;
         this.postRepository = postRepository;
         this.historyEntityFactoryService = historyEntityFactoryService;
         this.historyRepository = historyRepository;
-        this.fileRepository = fileRepository;
         this.indexesService = indexesService;
+        this.fileService = fileService;
         this.gitService = gitService;
     }
 
@@ -91,7 +92,7 @@ public class PostService {
         if(!UserAuthHelper.isCurrentUserAdmin() && !postEntity.getUsername().equals(userService.getCurrentUsername()))
             return false;
 
-        fileRepository.removeFile("images", postEntity.getCover());
+        fileService.removeImage(postEntity.getCover());
         userService.editUser(postEntity.getUsername(), new UserService.UserEditor() {
             @Override
             public void editUser(UserEntity userEntity) {
@@ -194,46 +195,34 @@ public class PostService {
     private void handleCover(PostDto postDto, PostEntity postEntity) {
         if(postDto.isRemoveCover()){
             if (postEntity.getCover() != null) {
-                fileRepository.removeFile("images", postEntity.getCover());
+                fileService.removeImage(postEntity.getCover());
             }
             postEntity.setCover(null);
             return;
         }
 
         if (postDto.getCoverImage() != null && !StringUtils.isEmpty(postDto.getCoverImage().getOriginalFilename())) {
-
             if (postEntity.getCover() != null) {
-                fileRepository.removeFile("images", postEntity.getCover());
+                fileService.removeImage(postEntity.getCover());
             }
-
-            String imageName = UUID.randomUUID().toString();
-            String extension = FilenameUtils.getExtension(postDto.getCoverImage().getOriginalFilename());
-            String fullPP = imageName + "." + extension;
-            fileRepository.addFile("images", fullPP, postDto.getCoverImage());
-            postEntity.setCover(fullPP);
+            postEntity.setCover(fileService.createImage(postDto.getCoverImage()));
         }
     }
 
     private void handleThumbnail(PostDto postDto, PostEntity postEntity) {
         if(postDto.isRemoveThumbnail()){
             if (postEntity.getThumbnail() != null) {
-                fileRepository.removeFile("images", postEntity.getThumbnail());
+                fileService.removeImage(postEntity.getThumbnail());
             }
             postEntity.setThumbnail(null);
             return;
         }
 
         if (postDto.getThumbnailImage() != null && !StringUtils.isEmpty(postDto.getThumbnailImage().getOriginalFilename())) {
-
             if (postEntity.getThumbnail() != null) {
-                fileRepository.removeFile("images", postEntity.getThumbnail());
+                fileService.removeImage(postEntity.getThumbnail());
             }
-
-            String imageName = UUID.randomUUID().toString();
-            String extension = FilenameUtils.getExtension(postDto.getThumbnailImage().getOriginalFilename());
-            String fullPP = imageName + "." + extension;
-            fileRepository.addFile("images", fullPP, postDto.getThumbnailImage());
-            postEntity.setThumbnail(fullPP);
+            postEntity.setThumbnail(fileService.createImage(postDto.getThumbnailImage()));
         }
     }
 

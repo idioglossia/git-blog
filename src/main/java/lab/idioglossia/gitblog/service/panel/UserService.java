@@ -5,14 +5,12 @@ import lab.idioglossia.gitblog.model.Role;
 import lab.idioglossia.gitblog.model.dto.UserAddDto;
 import lab.idioglossia.gitblog.model.dto.UserEditDto;
 import lab.idioglossia.gitblog.model.entity.UserEntity;
-import lab.idioglossia.gitblog.repository.FileRepository;
 import lab.idioglossia.gitblog.repository.HistoryRepository;
 import lab.idioglossia.gitblog.repository.UserRepository;
 import lab.idioglossia.gitblog.service.GitService;
 import lab.idioglossia.gitblog.service.HistoryEntityFactoryService;
 import lab.idioglossia.gitblog.service.IndexesService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -32,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
-    private final FileRepository fileRepository;
+    private final FileService fileService;
     private final PasswordEncoder passwordEncoder;
     private final GitService gitService;
     private final IndexesService indexesService;
@@ -41,9 +39,9 @@ public class UserService {
     private final Map<String, Session> sessionMap;
     private final List<String> keysCache = new CopyOnWriteArrayList<>();
 
-    public UserService(UserRepository userRepository, FileRepository fileRepository, PasswordEncoder passwordEncoder, GitService gitService, IndexesService indexesService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, Map<String, Session> sessionMap) {
+    public UserService(UserRepository userRepository, FileService fileService, PasswordEncoder passwordEncoder, GitService gitService, IndexesService indexesService, HistoryRepository historyRepository, HistoryEntityFactoryService historyEntityFactoryService, Map<String, Session> sessionMap) {
         this.userRepository = userRepository;
-        this.fileRepository = fileRepository;
+        this.fileService = fileService;
         this.passwordEncoder = passwordEncoder;
         this.gitService = gitService;
         this.indexesService = indexesService;
@@ -83,14 +81,9 @@ public class UserService {
                 if (userEditDto.getProfilePicture() != null && !StringUtils.isEmpty(userEditDto.getProfilePicture().getOriginalFilename())) {
                     log.info("Updating user profile picture");
                     if (userEntity.getProfilePicture() != null) {
-                        fileRepository.removeFile("images", userEntity.getProfilePicture());
+                        fileService.removeImage(userEntity.getProfilePicture());
                     }
-
-                    String profilePicName = UUID.randomUUID().toString();
-                    String extension = FilenameUtils.getExtension(userEditDto.getProfilePicture().getOriginalFilename());
-                    String fullPP = profilePicName + "." + extension;
-                    fileRepository.addFile("images", fullPP, userEditDto.getProfilePicture());
-                    userEntity.setProfilePicture(fullPP);
+                    userEntity.setProfilePicture(fileService.createImage(userEditDto.getProfilePicture()));
                 }
 
             }
