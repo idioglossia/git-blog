@@ -29,7 +29,9 @@ public class UserEntity {
     private String bio;
     private String website;
     private Date creationDate;
+    @Builder.Default
     private List<String> authorities = new ArrayList<>();
+    @Builder.Default
     private List<Integer> postIds = new ArrayList<>();
 
     @Override

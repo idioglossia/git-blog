@@ -5,6 +5,7 @@ import lab.idioglossia.jsonsloth.JsonSlothId;
 import lab.idioglossia.sloth.Collection;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +25,8 @@ public class PostEntity {
     private String content;
     private FollowUpButton followUpButton;
     private String username;
-    private List<String> tags;
+    @Builder.Default
+    private List<String> tags = new ArrayList<>();
     private String cover;
     private String thumbnail;
 

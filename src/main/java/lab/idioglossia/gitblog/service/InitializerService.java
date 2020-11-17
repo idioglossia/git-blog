@@ -77,6 +77,8 @@ public class InitializerService {
     private void setUpIndexes(JsonSlothManager jsonSlothManager, String adminUsername) {
         SlothIndexRepository slothIndexRepository = new SlothIndexRepository(jsonSlothManager);
         slothIndexRepository.save(IndexEntity.builder()
+                .posts(new ArrayList<>())
+                .tags(new ArrayList<>())
                 .usernames(Collections.singletonList(adminUsername))
                 .build());
     }
