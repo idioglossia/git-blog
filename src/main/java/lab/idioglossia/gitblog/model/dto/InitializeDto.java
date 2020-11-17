@@ -27,6 +27,8 @@ public class InitializeDto {
     @NotEmpty
     private String password;
     private String username;
+    private String pvkAddress;
+    private String khAddress;
 
     public String getUsername() {
         return StringUtils.isEmpty(username) ? "admin" : username;

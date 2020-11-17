@@ -34,8 +34,18 @@
         </div>
 
         <div class="form-group">
+            <label for="pvkAddress">SSH private key address</label>
+            <input type="text" name="pvkAddress" class="form-control" aria-describedby="pvkAddressHelp" id="pvkAddress" placeholder="Address to SSH Private key">
+            <small id="pvkAddressHelp" class="form-text text-muted">If you wish to do actions such as <b>pull</b> and <b>push</b> through panel, provide ssh private key address</small>
+
+            <label for="khAddress">SSH private key address</label>
+            <input type="text" name="khAddress" class="form-control" aria-describedby="khAddressHelp" id="khAddress" placeholder="Address to SSH Known Hosts">
+            <small id="khAddressHelp" class="form-text text-muted">If you wish to do actions such as <b>pull</b> and <b>push</b> through panel, provide ssh known hosts file address</small>
+        </div>
+
+        <div class="form-group">
             <label for="username">Admin Username</label>
-            <input type="username" name="username" class="form-control" aria-describedby="usernameHelp" id="username" placeholder="Admin Account Username" value="admin" required>
+            <input type="text" name="username" class="form-control" aria-describedby="usernameHelp" id="username" placeholder="Admin Account Username" value="admin" required>
             <small id="usernameHelp" class="form-text text-muted">Choose a username for an admin account that will be made through initializing process.</small>
         </div>
 

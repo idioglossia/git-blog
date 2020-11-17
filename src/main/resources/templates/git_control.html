@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{panel_layout}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Git Blog - Add user</title>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<!-- Main content -->
+<section layout:fragment="content" class="content">
+    <div class="container-fluid">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Git Control</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form role="form" method="post">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="pvkAddress">SSH private key address</label>
+                        <input type="text" th:value="${pvkAddress}" name="pvkAddress" class="form-control" aria-describedby="pvkAddressHelp" id="pvkAddress" placeholder="Address to SSH Private key">
+
+                        <label for="khAddress">SSH private key address</label>
+                        <input type="text" th:value="${khAddress}" name="khAddress" class="form-control" aria-describedby="khAddressHelp" id="khAddress" placeholder="Address to SSH Known Hosts">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="passphrase">Passphrase</label>
+                        <input type="password" class="form-control" name="passphrase" id="passphrase" placeholder="SSH Key passphrase">
+                        <small>Leave blank if key needs no passphrase</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="gitAction">Action</label>
+                        <select id="gitAction" name="action" class="custom-select">
+                            <option value="pull">Pull</option>
+                            <option value="push">Push</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Call</button>
+                </div>
+            </form>
+            <p th:if="${success != null && !success}" class="text-danger text-center">Failed to call the git action.</p>
+            <p th:if="${success != null && success}" class="text-success text-center">Successfully called the git action.</p>
+        </div>
+        <!-- /.card -->
+
+    </div>
+</section>
+</body>
+</html>
