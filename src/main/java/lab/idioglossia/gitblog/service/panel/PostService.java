@@ -187,7 +187,7 @@ public class PostService {
 
         postRepository.update(postEntity);
         historyRepository.save(historyEntityFactoryService.postUpdated(userEntity, postEntity));
-        gitService.addAndCommit("Post updated by" + userEntity.getUsername());
+        gitService.addAndCommit("Post updated by " + userEntity.getUsername());
 
         return postEntity;
     }
