@@ -46,3 +46,17 @@ If you are doing this on a server, you surely need to either open port 8083 on y
 After initialization, a `config.json` will be created in same directory as jar file, with logs. 
 
 If you want to run gitblog as a linux service, you can check [this repository](https://github.com/sepehr-gh/springboot-linux-service-builder) which I explained how to run a `spring-boot jar` as service on linux.
+
+## Configuration
+
+### SSH config for pull and push
+
+Gitblog uses **org.eclipse.jgit** to pull and push your repository. If you have cloned the repository using ssh, you will need to make sure you key type is RSA and starts with `-----BEGIN RSA PRIVATE KEY-----`. You can follow [this doc](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh) to understand how to add SSH Key to your github account. What is important here is that the default method mentioned there gives you `OpenSSH` key which is not supported by jgit Therefore, to generate a new key, try:
+
+```
+# OpenSSH 7.8 and above
+ssh-keygen -t rsa -m PEM
+
+# Older OpenSSH
+ssh-keygen -t rsa 
+```
