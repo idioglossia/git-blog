@@ -9,7 +9,9 @@ This data will be easily accessible through javascript and web browser. Therefor
 
 Every new data you generate by gitblog will be saved into `db` directory, mostly in json format. This data often has reference to other datas too. For example, a user object contains list of post ids of a user. This `db` directory will be initialized into your repository root folder, along with Git Blog UI which is couple of Html, Css, and JS files. The UI has an API and Engine, one to read the data you generate into `db` directory, other to render pages based on that data.
 
-An example of generated blog is available [here](https://idioglossia.github.io/git-blog-test/). Don't forget that the data there is just for example purpose and can be edited. 
+An example of generated blog is available [here](https://idioglossia.github.io/git-blog-test/). Don't forget that the data there is just for example purpose and can be edited.
+
+**[Read More about Git Blog on Medium](https://medium.com/@sepehrgh/git-blog-explaination-5066d8930762)**
 
 ## General Restrictions
 
@@ -23,7 +25,7 @@ This section contains restrictions (or known problems) of Git Blog that is only 
 - User passwords are encoded but saved along their profile information in `db`. So encoded version will be accessible through github repository in. This is not the safest way to store user passwords.
 - Editing usernames is not possible at this stage. Once an user is created with an unique username, it is impossible to change that username in panel.
 - Gitblog doesnt clone repositories for you. You can only pass cloned repository addresses from your machine.
-- Pull and Push commands might not work. Gitblog commits repository after any change in data, but you should push the result yourself.
+- Pull and Push commands might not work. Gitblog commits newly added/removed/edited files after any change in data, but you should push the result yourself.
 - **Gitblog doesnt work on Windows machines**. While It's not even tested on windows machine yet, there are linux commands for git service inside Gitblog that probably will break the tool on windows.
 
 There are more restrictions to include in this list but you can see the list of full bugs, issues, and features I will be working on [here](https://github.com/idioglossia/git-blog/projects/1). The plan is to reduce these restrictions in next versions. 
