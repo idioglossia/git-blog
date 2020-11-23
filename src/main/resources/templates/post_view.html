@@ -15,6 +15,14 @@
         <div class="card card-outline card-cyan">
             <div class="card-header">
                 <h3 class="card-title" th:text="${post.title}"></h3>
+                <div class="card-tools">
+                    <a th:if="${post.username.equals(currentUser.username) || currentUser.isAdmin()}" th:href="@{'/panel/posts/edit/' + ${post.id}}" class="btn btn-info btn-sm">Edit</a>
+                    <a data-toggle="modal" th:data-delete-type="post" th:data-post-id="${post.id}" th:if="${currentUser.isAdmin() || currentUser.getUsername().equals(post.username)}" class="delete-button btn btn-danger btn-sm" href="#">
+                        <i class="fas fa-trash">
+                        </i>
+                        Delete
+                    </a>
+                </div>
             </div>
             <div class="post">
                 <div th:if="${post.cover != null}" class="post-cover" th:style="'background-image:url(' + @{/db/images/{pp}((pp=${post.cover}))} + ');'"></div>
@@ -37,6 +45,26 @@
                     <th:block th:each="tag : ${post.tags}">
                         <span class="btn btn-sm btn-info" th:text="${tag}"></span>
                     </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete post <b id="dataIdHolder"></b>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" id="delete" class="btn btn-danger">Yes</button>
                 </div>
             </div>
         </div>
