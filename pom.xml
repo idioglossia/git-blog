@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>lab.idioglossia</groupId>
 	<artifactId>git-blog</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<name>Git Blog</name>
 	<description>Simple blog using github pages and organized contents</description>
 	<packaging>jar</packaging>
@@ -134,17 +134,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
 							<goal>repackage</goal>
 						</goals>
-						<configuration>
-							<classifier>spring-boot</classifier>
-							<mainClass>
-								lab.idioglossia.gitblog.GitBlogApplication
-							</mainClass>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
