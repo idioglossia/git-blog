@@ -42,7 +42,7 @@ Running gitblog require Java version 8 or 8+. You can see all [released versions
 
 - Move jar file to a directory of your wish
 - Open command line in that directory
-- Run `java -jar gitblog.jar`
+- Run `java -jar gitblog.jar` or try `./gitblog.jar` for **v0.1.beta +**
 - Gitblog is now accessible through port 8083, so navigate your browser to `http://localhost:8083`
 
 If you are doing this on a server, you surely need to either open port 8083 on your server or use a reverese proxy like Nginx.
