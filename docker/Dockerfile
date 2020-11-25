@@ -4,4 +4,4 @@ RUN apk update && apk add wget unzip
 RUN cd /opt && wget -nc https://github.com/idioglossia/git-blog/releases/download/v0.2.2/release.zip && unzip release.zip && rm release.zip
 WORKDIR /opt/gitblog/
 CMD ["sh","-c", "cp /opt/gitblog.jar /opt/gitblog && java -jar /opt/gitblog/gitblog.jar"]
-Expose 8083
+EXPOSE 8083
