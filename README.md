@@ -38,9 +38,12 @@ There are other minor issues too, for example panel could be much better and usa
 
 ## How to run
 
-Running gitblog require Java version 8 or 8+. You can see all [released versions](https://github.com/idioglossia/git-blog/releases) and choose the version you want (probably always latest version). Under **assets** of each version, there will be a `gitblog.jar` file which you will need to run gitblog.
+### Run using release zip
 
-- Move jar file to a directory of your wish
+Running gitblog require Java version 8 or 8+. You can see all [released versions](https://github.com/idioglossia/git-blog/releases) and choose the version you want (probably always latest version). Under **assets** of each version, there will be a `release.zip` file which you will need to run gitblog.
+
+- Unzip `release.zip`
+- Move `gitblog.jar` file to a directory of your wish
 - Open command line in that directory
 - Run `java -jar gitblog.jar` or try `./gitblog.jar` for **v0.1.beta +**
 - Gitblog is now accessible through port 8083, so navigate your browser to `http://localhost:8083`
@@ -50,6 +53,10 @@ If you are doing this on a server, you surely need to either open port 8083 on y
 After initialization, a `config.json` will be created in same directory as jar file, with logs. 
 
 If you want to run gitblog as a linux service, you can check [this repository](https://github.com/sepehr-gh/springboot-linux-service-builder) which I explained how to run a `spring-boot jar` as service on linux.
+
+### Docker
+
+There is a docker support for Git Blog. Check it [here](https://hub.docker.com/r/idioglossia/git-blog).
 
 ## Configuration
 
