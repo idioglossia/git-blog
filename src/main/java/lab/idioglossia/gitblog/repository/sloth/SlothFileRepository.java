@@ -1,9 +1,9 @@
 package lab.idioglossia.gitblog.repository.sloth;
 
 import lab.idioglossia.gitblog.repository.FileRepository;
-import lab.idioglossia.sloth.Collection;
-import lab.idioglossia.sloth.SlothStorage;
-import lab.idioglossia.sloth.Value;
+import lab.idioglossia.sloth.collection.Collection;
+import lab.idioglossia.sloth.collection.Value;
+import lab.idioglossia.sloth.storage.SlothStorage;
 import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 

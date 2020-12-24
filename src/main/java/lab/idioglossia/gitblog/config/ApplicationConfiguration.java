@@ -6,7 +6,7 @@ import lab.idioglossia.gitblog.repository.*;
 import lab.idioglossia.gitblog.repository.sloth.*;
 import lab.idioglossia.jsonsloth.JsonSlothManager;
 import lab.idioglossia.jsonsloth.JsonSlothStorage;
-import lab.idioglossia.sloth.SlothStorage;
+import lab.idioglossia.sloth.storage.SlothStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;

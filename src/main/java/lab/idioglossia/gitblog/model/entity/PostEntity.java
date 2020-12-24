@@ -2,7 +2,7 @@ package lab.idioglossia.gitblog.model.entity;
 
 import lab.idioglossia.jsonsloth.JsonSlothEntity;
 import lab.idioglossia.jsonsloth.JsonSlothId;
-import lab.idioglossia.sloth.Collection;
+import lab.idioglossia.sloth.collection.Collection;
 import lombok.*;
 
 import java.util.ArrayList;
