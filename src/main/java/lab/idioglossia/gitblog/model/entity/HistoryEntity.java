@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.util.Date;
 
-@JsonSlothEntity(collectionName = "hisotry", type = Collection.Type.LIST)
+@JsonSlothEntity(collectionName = "history", type = Collection.Type.LIST)
 @Getter
 @Setter
 @Builder
