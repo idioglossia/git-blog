@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>lab.idioglossia</groupId>
 	<artifactId>git-blog</artifactId>
-	<version>0.2.2-RELEASE</version>
+	<version>0.3.0-RELEASE</version>
 	<name>Git Blog</name>
 	<description>Simple blog using github pages and organized contents</description>
 	<packaging>jar</packaging>
@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>com.github.idioglossia</groupId>
 			<artifactId>json-sloth</artifactId>
-			<version>1.1.7-RELEASE</version>
+			<version>1.2.0-RELEASE</version>
 		</dependency>
 
 		<dependency>
