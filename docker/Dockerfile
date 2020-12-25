@@ -14,7 +14,6 @@ RUN adduser \
     --disabled-password \
     --gecos "" \
     --ingroup "$USER" \
-    --no-create-home \
     --ingroup "$GROUP" \
     --uid "$UID" \
     "$USER"
